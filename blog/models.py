@@ -121,7 +121,11 @@ class BlogIndex(RoutablePageMixin, BasePage):
                 except Page.DoesNotExist:
                     pass
                 else:
-                    # If the request included incorrect dates, redirect to the canonical url
+                    # 404 if the post hasn't been published
+                    if not post.live:
+                        raise Http404
+
+                    # Redirect to the canonical url if the request included incorrect dates
                     if post.pub_date.year != int(year) or post.pub_date.month != int(month):
                         canonical_post_url = post.url
                         if remaining_components:
@@ -130,6 +134,7 @@ class BlogIndex(RoutablePageMixin, BasePage):
                         response = HttpResponsePermanentRedirect(canonical_post_url)
                         return RouteResult(ResponseOverrideWrapper(post, response))
 
+                    # Otherwise, delegate routing to the post
                     return post.route(request, remaining_components)
 
         # Handle paths of the form slug/ - matching blog posts shouldn't be accessible this way
