@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% load wagtailcore_tags %}
+
+{% block content %}
+    {% for post in posts %}
+        <article>
+            <h2 class="content_edge"><a href="{% pageurl post %}">{{ post.title }}</a></h2>
+            {% include "blog/post_body.html" %}
+        </article>
+    {% endfor %}
+{% endblock %}

@@ -1,0 +1,7 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <article>
+        {% include "blog/post_body.html" with post=page %}
+    </article>
+{% endblock %}

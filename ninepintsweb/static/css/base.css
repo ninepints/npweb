@@ -1,0 +1,149 @@
+/* General structure */
+
+body,
+div,
+nav
+{
+    margin: 0;
+}
+
+.content_edge
+{
+    margin-left: auto;
+    margin-right: auto;
+    padding: 0 1rem;
+    max-width: 640px;
+}
+
+.page_edge
+{
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 960px;
+}
+
+.full_bleed,
+.full_bleed > img
+{
+    width: 100%;
+}
+
+
+/* Typography */
+
+body
+{
+    font-size: 1.25rem;
+    line-height: 1.75rem;
+    color: rgb(54,54,63);
+}
+
+h1
+{
+    font-size: 3rem;
+    line-height: 5.25rem;
+    margin: 5.25rem 0 3.5rem;
+}
+
+h2
+{
+    font-size: 2rem;
+    line-height: 3.5rem;
+    margin: 3.5rem 0 1.75rem;
+}
+
+p
+{
+    font-size: 1.25rem;
+    line-height: 1.75rem;
+    margin: 1.75rem 0;
+}
+
+
+/* Miscellany */
+
+a:any-link
+{
+    color: rgb(57,141,255);
+    text-decoration: none;
+}
+
+a:any-link:hover
+{
+    text-decoration: underline;
+}
+
+a:any-link:active
+{
+    color: rgb(48,119,215);
+}
+
+ul, ol
+{
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+}
+
+/* Hero element */
+
+#hero_nav > ul
+{
+    overflow: hidden;
+}
+
+#hero_nav > ul > li
+{
+    float: left;
+    margin-right: 1rem;
+}
+
+#hero_nav > ul > li:last-child
+{
+    margin-right: 0;
+}
+
+#hero_nav a
+{
+    display: inline-block;
+    font-size: 1.25rem;
+    line-height: 1.75rem;
+    margin: 0.875rem 0;
+}
+
+#hero h1
+{
+    margin: 0;
+}
+
+#hero.with_image
+{
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: 50% 0;
+}
+
+#hero.with_image #hero_nav a,
+#hero.with_image h1
+{
+    color: white;
+}
+
+#hero.with_image #hero_nav a:active
+{
+    color: rgb(233,233,233);
+}
+
+#hero.with_image #hero_nav
+{
+    background-color: rgba(54,54,63,0.4);
+}
+
+#hero.with_image > #hero_gradient
+{
+    background-image: linear-gradient(to top, rgba(54,54,63,0.4), transparent);
+    margin-top: 10em;
+    padding-top: 4em;
+}
+
+
