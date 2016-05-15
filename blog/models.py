@@ -11,9 +11,9 @@ from taggit.models import TaggedItemBase
 
 from wagtail.contrib.wagtailroutablepage.models import RoutablePageMixin, route
 from wagtail.wagtailadmin.edit_handlers import FieldPanel, StreamFieldPanel
-from wagtail.wagtailcore import blocks
+from wagtail.wagtailcore.blocks import RichTextBlock
 from wagtail.wagtailcore.models import Page
-from wagtail.wagtailcore.fields import RichTextField, StreamField
+from wagtail.wagtailcore.fields import StreamField
 from wagtail.wagtailcore.url_routing import RouteResult
 from wagtail.wagtaildocs.blocks import DocumentChooserBlock
 from wagtail.wagtailembeds.blocks import EmbedBlock
@@ -53,44 +53,67 @@ class BasePage(Page):
 
 
 class BlogIndex(RoutablePageMixin, BasePage):
-    intro = RichTextField()
+    subpage_types = ['blog.BlogPost']
 
-    content_panels = BasePage.content_panels + [
-        FieldPanel('intro')
-    ]
+    posts_per_page = 3
 
     @route(r'^$')
     def all_posts(self, request):
-        return Page.serve(self, request, title='')
+        return self.paginate(request, posts=self.posts.live(), view_name='all_posts', title=self.title)
 
     @route(r'^tag/(?P<tag>[\a-zA-Z0-9_-]+)/$')
     def posts_by_tag(self, request, tag):
-        posts = self.posts.live().filter(tags__name=tag)
+        return self.paginate(request, posts=self.posts.live().filter(tags__name=tag),
+                             view_name='posts_by_tag', view_kwargs={'tag': tag},
+                             title='Posts tagged "{}"'.format(tag), intro='')
 
-        return Page.serve(self, request, posts=posts, title='Posts tagged "{}"'.format(tag), intro='')
-
-    @route(r'^(?P<year>\d+)/(?:(?P<month>\d{2})/)?$')
+    @route(r'^(?P<year>\d+)/$')
+    @route(r'^(?P<year>\d+)/(?P<month>\d{2})/$')
     def posts_by_date(self, request, year, month=None):
-        posts = self.posts.live()
-
         if month is None:
-            posts = posts.filter(pub_date__year=int(year))
+            posts = self.posts.live().filter(pub_date__year=int(year))
             title = year
         else:
             n_year, n_month = int(year), int(month)
-            posts = posts.filter(pub_date__year=n_year, pub_date__month=n_month)
+            posts = self.posts.live().filter(pub_date__year=n_year, pub_date__month=n_month)
             title = datetime.date(n_year, n_month, 1).strftime('%B %Y')
 
-        return Page.serve(self, request, posts=posts, title=title, intro='')
+        return self.paginate(request, posts=posts,
+                             view_name='posts_by_date', view_kwargs={'year': year, 'month': month},
+                             title=title, intro='')
+
+    def paginate(self, request, posts, view_name, view_kwargs=None, **kwargs):
+        try:
+            page = int(request.GET.get('page', 1))
+        except (TypeError, ValueError):
+            page = 1
+        if page < 1:
+            page = 1
+
+        page_start_index = (page - 1) * self.posts_per_page
+        page_end_index = page * self.posts_per_page
+        posts = posts.specific().order_by('-pub_date')[page_start_index:page_end_index]
+        post_count = posts.count()
+
+        base_url = prev_page_url = next_page_url = None
+        if page >= 2 or post_count >= page_end_index:
+            base_url = self.url + self.reverse_subpage(view_name, kwargs=view_kwargs)
+        if page == 2:
+            prev_page_url = base_url
+        elif page > 2:
+            prev_page_url = base_url + '?page=' + str(page - 1)
+        if post_count >= page_end_index:
+            next_page_url = base_url + '?page=' + str(page + 1)
+
+        return Page.serve(self, request, posts=posts,
+                          prev_page_url=prev_page_url, next_page_url=next_page_url,
+                          **kwargs)
 
     def get_context(self, request, *args, **kwargs):
         context = super().get_context(request, *args, **kwargs)
 
-        posts = kwargs.get('posts', self.posts.live())
-        context['posts'] = posts.specific().order_by('-pub_date')
-
-        context['title'] = kwargs.get('title', self.title)
-        context['intro'] = kwargs.get('intro', self.intro)
+        for key in ('posts', 'prev_page_url', 'next_page_url'):
+            context[key] = kwargs[key]
 
         return context
 
@@ -98,8 +121,8 @@ class BlogIndex(RoutablePageMixin, BasePage):
     def posts(self):
         return BlogPost.objects.child_of(self)
 
-    _year_re = re.compile(r'^\d+$')
-    _month_re = re.compile(r'^\d{2}$')
+    _year_regex = re.compile(r'^\d+$')
+    _month_regex = re.compile(r'^\d{2}$')
 
     def route(self, request, path_components):
         """
@@ -115,7 +138,7 @@ class BlogIndex(RoutablePageMixin, BasePage):
             year, month, child_slug = path_components[:3]
             remaining_components = path_components[3:]
 
-            if self._year_re.match(year) and self._month_re.match(month):
+            if self._year_regex.match(year) and self._month_regex.match(month):
                 try:
                     post = self.posts.get(slug=child_slug).specific
                 except Page.DoesNotExist:
@@ -157,9 +180,11 @@ class BlogPostTag(TaggedItemBase):
 
 
 class BlogPost(BasePage):
-    pub_date = models.DateField(verbose_name='Publication date')
+    parent_page_types = ['blog.BlogIndex']
+
+    pub_date = models.DateTimeField(verbose_name='Publication date')
     body = StreamField([
-        ('text', blocks.RichTextBlock()),
+        ('text', RichTextBlock()),
         ('image', ImageChooserBlock()),
         ('embed', EmbedBlock()),
         ('document', DocumentChooserBlock())
@@ -186,3 +211,10 @@ class BlogPost(BasePage):
             self.url_path = '/'
 
         return self.url_path
+
+    @property
+    def first_text_block(self):
+        try:
+            return next(filter(lambda x: isinstance(x.block, RichTextBlock), self.body))
+        except StopIteration:
+            return None

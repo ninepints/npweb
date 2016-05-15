@@ -6,7 +6,11 @@
     {% for post in posts %}
         <article>
             <h2 class="content_edge"><a href="{% pageurl post %}">{{ post.title }}</a></h2>
-            {% include "blog/post_body.html" %}
+            {% if full_posts %}
+                {% include "blog/post_body.html" %}
+            {% else %}
+                <div class="content_edge">{{ post.first_text_block }}</div>
+            {% endif %}
         </article>
     {% endfor %}
 {% endblock %}
