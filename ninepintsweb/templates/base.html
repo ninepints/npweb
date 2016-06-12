@@ -18,17 +18,17 @@
         {% if page.hero_image %}{% image page.hero_image original as hero_image %}{% endif %}
 
         <header id="hero"{% if page.hero_image %} class="with_image" style="background-image: url({{ hero_image.url }})"{% endif %}>
-            <nav id="hero_nav">
-                <ul class="content_edge">
+            <div id="hero_nav"><nav class="col_container">
+                <ul class="col8">
                     <li><a href="{% pageurl request.site.root_page %}">Home</a></li>
                     <li><a href="{% slugurl 'about' %}">About</a></li>
                 </ul>
-            </nav>
+            </nav></div>
 
             <div id="hero_gradient">
                 {% block hero_content %}
-                    <div class="content_edge">
-                        <h1>{{ page.title }}</h1>
+                    <div class="col_container">
+                        <h1 class="col8">{{ page.title }}</h1>
                     </div>
                 {% endblock %}
             </div>

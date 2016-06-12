@@ -5,11 +5,15 @@
 {% block content %}
     {% for post in posts %}
         <article>
-            <h2 class="content_edge"><a href="{% pageurl post %}">{{ post.title }}</a></h2>
+            <div class="col_container marginless">
+                <h2 class="col8"><a href="{% pageurl post %}">{{ post.title }}</a></h2>
+            </div>
             {% if full_posts %}
                 {% include "blog/post_body.html" %}
             {% else %}
-                <div class="content_edge">{{ post.first_text_block }}</div>
+                <div class="col_container"><div class="col8">
+                    {{ post.first_text_block }}
+                </div></div>
             {% endif %}
         </article>
     {% endfor %}

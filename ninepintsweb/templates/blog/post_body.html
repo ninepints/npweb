@@ -1,7 +1,7 @@
 {# TODO: is factoring this out necessary? unless it gets bigger, probably not #}
 
 {% for block in post.body %}
-    <div class="content_edge">
+    <div class="col_container"><div class="col8">
         {{ block }}
-    </div>
+    </div></div>
 {% endfor %}

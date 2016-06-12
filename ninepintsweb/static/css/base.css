@@ -7,19 +7,95 @@ nav
     margin: 0;
 }
 
-.content_edge
+.col_container
 {
-    margin-left: auto;
-    margin-right: auto;
-    padding: 0 1rem;
-    max-width: 640px;
+    display: flex;
+    max-width: 960px;
+    margin: 0 auto;
+    justify-content: center;
+    flex-wrap: wrap;
 }
 
-.page_edge
+.col_container.alignleft
 {
-    margin-left: auto;
-    margin-right: auto;
-    max-width: 960px;
+    justify-content: flex-start;
+}
+
+.col_container.alignright
+{
+    justify-content: flex-end;
+}
+
+.col_container.marginless
+{
+    margin: -1.75rem auto;
+}
+
+.col_container > *
+{
+    padding-left: 1rem;
+    padding-right: 1rem;
+    box-sizing: border-box;
+}
+
+.col1
+{
+    flex: 0 1 80px;
+}
+
+.col2
+{
+    flex: 0 1 160px;
+}
+
+.col3
+{
+    flex: 0 1 240px;
+}
+
+.col4
+{
+    flex: 0 1 320px;
+}
+
+.col5
+{
+    flex: 0 1 400px;
+}
+
+.col6
+{
+    flex: 0 1 480px;
+}
+
+.col7
+{
+    flex: 0 1 560px;
+}
+
+.col8
+{
+    flex: 0 1 640px;
+}
+
+.col9
+{
+    flex: 0 1 720px;
+}
+
+.col10
+{
+    flex: 0 1 800px;
+}
+
+.col11
+{
+    flex: 0 1 880px;
+}
+
+.col12
+{
+    flex: 0 1 960px;
 }
 
 .full_bleed,
@@ -65,6 +141,17 @@ p
 }
 
 
+/* For small computers */
+
+@media (max-width: 639px)
+{
+    html
+    {
+        font-size: 0.9rem;
+    }
+}
+
+
 /* Miscellany */
 
 a:any-link
@@ -83,7 +170,8 @@ a:any-link:active
     color: rgb(48,119,215);
 }
 
-ul, ol
+ul,
+ol
 {
     margin: 0;
     padding: 0;
@@ -92,18 +180,18 @@ ul, ol
 
 /* Hero element */
 
-#hero_nav > ul
+#hero_nav ul
 {
     overflow: hidden;
 }
 
-#hero_nav > ul > li
+#hero_nav ul > li
 {
     float: left;
     margin-right: 1rem;
 }
 
-#hero_nav > ul > li:last-child
+#hero_nav ul > li:last-child
 {
     margin-right: 0;
 }
@@ -147,9 +235,14 @@ ul, ol
 
 #hero.with_image > #hero_gradient
 {
-    background-image: linear-gradient(to top, rgba(54,54,63,0.4), transparent);
-    margin-top: 10em;
-    padding-top: 4em;
+    background-image: linear-gradient(
+        to top,
+        rgba(54,54,63,0.4) 0%,
+        rgba(54,54,63,0.2) 33%,
+        transparent 100%
+    );
+    margin-top: 5.25rem;
+    padding-top: 11rem;
 }
 
 
