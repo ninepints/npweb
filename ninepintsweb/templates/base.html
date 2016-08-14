@@ -15,24 +15,31 @@
     <body>
         {% wagtailuserbar %}
 
-        {% if page.hero_image %}{% image page.hero_image original as hero_image %}{% endif %}
+        {% if page.hero_image %}
+            {% image page.hero_image original as hero_image %}
+            <header id="hero" class="with_image" style="background-image: url({{ hero_image.url }})">
+                <div id="hero_gradient">
+        {% else %}
+            <header id="hero">
+        {% endif %}
 
-        <header id="hero"{% if page.hero_image %} class="with_image" style="background-image: url({{ hero_image.url }})"{% endif %}>
-            <div id="hero_nav"><nav class="col_container">
-                <ul class="col8">
-                    <li><a href="{% pageurl request.site.root_page %}">Home</a></li>
-                    <li><a href="{% slugurl 'about' %}">About</a></li>
-                </ul>
-            </nav></div>
-
-            <div id="hero_gradient">
-                {% block hero_content %}
-                    <div class="col_container">
-                        <h1 class="col8">{{ page.title }}</h1>
-                    </div>
-                {% endblock %}
+        {% block hero_content %}
+            <div class="col_container">
+                <h1 class="col8">{{ page.title }}</h1>
             </div>
+        {% endblock %}
+
+        {% if page.hero_image %}
+            </div>
+        {% endif %}
         </header>
+
+        <nav id="main_nav"><div class="col_container">
+                <ul class="col8">
+                    <li><a class="button" href="{% pageurl request.site.root_page %}">Home</a></li>
+                    <li><a class="button" href="{% slugurl 'about' %}">About</a></li>
+                </ul>
+        </div></nav>
 
         {% block content %}{% endblock %}
 
