@@ -17,4 +17,21 @@
             {% endif %}
         </article>
     {% endfor %}
+
+    <div class="col_container marginless">
+        {% if prev_page_url %}
+            <a class="col4 blocklink prev" href="{{ prev_page_url }}">
+                <p>Newer posts</p>
+            </a>
+        {% else %}
+            <div class="col4"></div>
+        {% endif %}
+        {% if next_page_url %}
+            <a class="col4 blocklink next" href="{{ next_page_url }}">
+                <p>Older posts</p>
+            </a>
+        {% else %}
+            <div class="col4"></div>
+        {% endif %}
+    </div>
 {% endblock %}
