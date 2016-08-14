@@ -1,8 +1,10 @@
 import datetime
+import math
 import re
 
 from django.db import models
 from django.http import Http404, HttpResponsePermanentRedirect
+from django.http import HttpResponseRedirect
 
 from modelcluster.fields import ParentalKey
 from modelcluster.contrib.taggit import ClusterTaggableManager
@@ -83,29 +85,32 @@ class BlogIndex(RoutablePageMixin, BasePage):
                              title=title, intro='')
 
     def paginate(self, request, posts, view_name, view_kwargs=None, **kwargs):
+        post_count = posts.count()
+        max_page = max(math.ceil(post_count / self.posts_per_page), 1)
+        base_url = self.url + self.reverse_subpage(view_name, kwargs=view_kwargs)
+
         try:
             page = int(request.GET.get('page', 1))
         except (TypeError, ValueError):
             page = 1
-        if page < 1:
-            page = 1
+        if page < 1 or page > max_page == 1:
+            return HttpResponseRedirect(base_url)
+        elif page > max_page:
+            return HttpResponseRedirect(base_url + '?page=' + str(max_page))
 
         page_start_index = (page - 1) * self.posts_per_page
         page_end_index = page * self.posts_per_page
-        posts = posts.specific().order_by('-pub_date')[page_start_index:page_end_index]
-        post_count = posts.count()
 
-        base_url = prev_page_url = next_page_url = None
-        if page >= 2 or post_count >= page_end_index:
-            base_url = self.url + self.reverse_subpage(view_name, kwargs=view_kwargs)
+        prev_page_url = next_page_url = None
         if page == 2:
             prev_page_url = base_url
         elif page > 2:
             prev_page_url = base_url + '?page=' + str(page - 1)
-        if post_count >= page_end_index:
+        if post_count > page_end_index:
             next_page_url = base_url + '?page=' + str(page + 1)
 
-        return Page.serve(self, request, posts=posts,
+        return Page.serve(self, request,
+                          posts=posts.specific().order_by('-pub_date')[page_start_index:page_end_index],
                           prev_page_url=prev_page_url, next_page_url=next_page_url,
                           **kwargs)
 
@@ -211,6 +216,26 @@ class BlogPost(BasePage):
             self.url_path = '/'
 
         return self.url_path
+
+    @property
+    def prev_post(self):
+        return (self.get_parent().specific.posts
+                .live()
+                .not_page(self)
+                .specific()
+                .filter(pub_date__lte=self.pub_date)
+                .order_by('-pub_date')
+                .first())
+
+    @property
+    def next_post(self):
+        return (self.get_parent().specific.posts
+                .live()
+                .not_page(self)
+                .specific()
+                .filter(pub_date__gte=self.pub_date)
+                .order_by('pub_date')
+                .first())
 
     @property
     def first_text_block(self):
