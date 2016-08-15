@@ -185,15 +185,6 @@ a:any-link:active
     color: rgb(48,119,215);
 }
 
-a.button
-{
-    font-size: 1.25rem;
-    line-height: 1.75rem;
-    margin: 0.875rem 0;
-    font-family: 'Brando Sans Light';
-    /* TODO small caps */
-}
-
 a.blocklink
 {
     display: block;
@@ -204,12 +195,13 @@ a.blocklink
 
 a.blocklink:any-link:hover
 {
-    background-color: rgb(250,250,250);
+    background-color: rgb(245,245,245);
+    text-decoration: none;
 }
 
 a.blocklink:any-link:active
 {
-    background-color: rgb(244,244,244);
+    background-color: rgb(237,237,237);
 }
 
 .blocklink > p
@@ -268,6 +260,12 @@ p.faded, .faded a:any-link
 
 /* Hero, nav, stuff at the top of the page */
 
+#hero
+{
+    background-color: rgb(60,54,63);
+    color: white;
+}
+
 #hero h1
 {
     margin: 0;
@@ -278,17 +276,16 @@ p.faded, .faded a:any-link
     background-repeat: no-repeat;
     background-size: cover;
     background-position: 50% 0;
-    color: white;
     overflow: hidden;
 }
 
 #hero_gradient
 {
     background-image: linear-gradient(
-        to top,
-        rgba(60,54,63,0.3) 0%,
-        rgba(60,54,63,0.2) 50%,
-        transparent 100%
+        to bottom,
+        transparent 0%,
+        rgba(60,54,63,0.35) 11rem,
+        rgba(60,54,63,0.35) 100%
     );
     margin-top: 5.25rem;
     padding-top: 11rem;
@@ -308,16 +305,26 @@ p.faded, .faded a:any-link
 #main_nav ul > li
 {
     float: left;
-    margin-right: 1rem;
 }
 
-#main_nav ul > li:last-child
+#main_nav ul > li:first-child
 {
-    margin-right: 0;
+    margin-left: -1rem;
 }
 
 #main_nav a
 {
     display: inline-block;
+    font-size: 1.25rem;
+    line-height: 1.75rem;
+    padding: 0.875rem 1rem;
+    font-family: 'Brando Sans Light';
+    text-transform: uppercase;
+}
+
+#main_nav a:any-link:hover
+{
+    background-color: rgb(88,87,92);
+    text-decoration: none;
 }
 
