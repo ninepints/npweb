@@ -1,0 +1,11 @@
+{% load wagtailroutablepage_tags %}
+
+<div class="col_container marginless"><div class="col8">
+    <p class="faded sans_serif lining_numerals">
+        <a href="{% routablepageurl post.get_parent.specific "posts_by_date" post.pub_date.year post.pub_date.month %}">{{ post.pub_date|date:"F j, Y" }}</a>
+        {% if post.tags.count > 0 %}<br/>{% endif %}
+        {% for tag in post.tags.all %}
+            <a href="{% routablepageurl post.get_parent.specific "posts_by_tag" tag %}">#{{ tag }}</a>
+        {% endfor %}
+    </p>
+</div></div>
