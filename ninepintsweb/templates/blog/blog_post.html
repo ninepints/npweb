@@ -5,6 +5,7 @@
 {% block content %}
     <article>
         {% include "blog/post_body.html" with post=page %}
+        {% include "blog/post_meta.html" with post=page %}
     </article>
     <div class="col_container marginless">
         {% if page.next_post %}

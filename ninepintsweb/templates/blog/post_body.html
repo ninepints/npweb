@@ -1,5 +1,3 @@
-{# TODO: is factoring this out necessary? unless it gets bigger, probably not #}
-
 {% for block in post.body %}
     <div class="col_container{% if not forloop.first %} marginless{% endif %}"><div class="col8">
         {{ block }}

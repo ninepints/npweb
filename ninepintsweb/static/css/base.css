@@ -140,6 +140,21 @@ p
     margin: 1.75rem 0;
 }
 
+.sans_serif
+{
+    font-family: "Brando Sans Light";
+}
+
+.lining_numerals
+{
+    -moz-font-feature-settings: "lnum";
+    -webkit-font-feature-settings: "lnum";
+    font-feature-settings: "lnum";
+    -moz-font-variant-numeric: lining-nums;
+    -webkit-font-variant-numeric: lining-nums;
+    font-variant-numeric: lining-nums;
+}
+
 
 /* For small computers */
 
@@ -239,6 +254,16 @@ ol
     margin: 0;
     padding: 0;
     list-style-type: none;
+}
+
+p.faded, .faded a:any-link
+{
+    color: rgb(166,165,174);
+}
+
+.faded a:any-link:active, a.faded:any-link:active
+{
+    color: rgb(148,147,155);
 }
 
 /* Hero, nav, stuff at the top of the page */

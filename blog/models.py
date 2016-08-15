@@ -71,6 +71,7 @@ class BlogIndex(RoutablePageMixin, BasePage):
 
     @route(r'^(?P<year>\d+)/$')
     @route(r'^(?P<year>\d+)/(?P<month>\d{2})/$')
+    @route(r'^(?P<year>\d+)/0(?P<month>\d{1})/$')
     def posts_by_date(self, request, year, month=None):
         if month is None:
             posts = self.posts.live().filter(pub_date__year=int(year))
@@ -117,7 +118,7 @@ class BlogIndex(RoutablePageMixin, BasePage):
     def get_context(self, request, *args, **kwargs):
         context = super().get_context(request, *args, **kwargs)
 
-        for key in ('posts', 'prev_page_url', 'next_page_url'):
+        for key in ('title', 'posts', 'prev_page_url', 'next_page_url'):
             context[key] = kwargs[key]
 
         return context
