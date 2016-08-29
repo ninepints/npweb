@@ -110,17 +110,16 @@ class BlogIndex(RoutablePageMixin, BasePage):
         if post_count > page_end_index:
             next_page_url = base_url + '?page=' + str(page + 1)
 
-        return Page.serve(self, request,
-                          posts=posts.specific().order_by('-pub_date')[page_start_index:page_end_index],
+        posts = posts.specific().order_by('-pub_date')[page_start_index:page_end_index]
+
+        return Page.serve(self, request, posts=posts,
                           prev_page_url=prev_page_url, next_page_url=next_page_url,
+                          any_post_contains_math=any(post.contains_math for post in posts),
                           **kwargs)
 
     def get_context(self, request, *args, **kwargs):
         context = super().get_context(request, *args, **kwargs)
-
-        for key in ('title', 'posts', 'prev_page_url', 'next_page_url'):
-            context[key] = kwargs[key]
-
+        context.update(kwargs)
         return context
 
     @property
@@ -244,3 +243,11 @@ class BlogPost(BasePage):
             return next(filter(lambda x: isinstance(x.block, RichTextBlock), self.body))
         except StopIteration:
             return None
+
+    @property
+    def contains_math(self):
+        for block in self.body:
+            if isinstance(block.block, RichTextBlock):
+                if re.search(r'(?:\\\[.*\\\])|(?:\\\(.*\\\))', block.value.source):
+                    return True
+        return False
