@@ -1,0 +1,12 @@
+{% load static %}
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        jax: ['input/TeX', 'output/CommonHTML'],
+        extensions: ['tex2jax.js','MathMenu.js','MathZoom.js','AssistiveMML.js'],
+        TeX: {
+            extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js']
+        }
+    });
+</script>
+<script type="text/javascript" src="{% static 'lib/MathJax-2.6.1/MathJax.js' %}"></script>

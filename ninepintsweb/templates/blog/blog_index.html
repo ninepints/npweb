@@ -4,6 +4,12 @@
 
 {% block title %}{{ title }}{% endblock %}
 
+{% block extra_js %}
+    {% if any_post_contains_math %}
+        {% include "mathjax.html" %}
+    {% endif %}
+{% endblock %}
+
 {% block hero_content %}
     <div class="col_container">
         <h1 class="col8">{{ title }}</h1>

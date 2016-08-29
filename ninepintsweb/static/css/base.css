@@ -318,6 +318,7 @@ p.faded, .faded a:any-link
     font-size: 1.25rem;
     line-height: 1.75rem;
     padding: 0.875rem 1rem;
+    color: white;
     font-family: 'Brando Sans Light';
     text-transform: uppercase;
 }
