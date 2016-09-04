@@ -3,9 +3,8 @@
 {% load wagtailcore_tags %}
 
 {% block extra_js %}
-    {% if any_post_contains_math %}
-        {% include "mathjax.html" %}
-    {% endif %}
+    {{ block.super }}
+    {% if includes_math %}{% include "mathjax.html" %}{% endif %}
 {% endblock %}
 
 {% block content %}

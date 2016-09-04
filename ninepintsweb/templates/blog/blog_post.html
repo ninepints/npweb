@@ -1,11 +1,18 @@
 {% extends "base.html" %}
 
+{% load static %}
 {% load wagtailcore_tags %}
 
-{% block extra_js %}
-    {% if page.contains_math %}
-        {% include "mathjax.html" %}
+{% block extra_css %}
+    {{ block.super }}
+    {% if page.contains_code %}
+        <link rel="stylesheet" type="text/css" href="{% static 'css/pygments.css' %}"/>
     {% endif %}
+{% endblock %}
+
+{% block extra_js %}
+    {{ block.super }}
+    {% if page.contains_math %}{% include "mathjax.html" %}{% endif %}
 {% endblock %}
 
 {% block content %}
