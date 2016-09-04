@@ -71,7 +71,7 @@ class BlogIndex(RoutablePageMixin, BasePage):
 
     @route(r'^(?P<year>\d+)/$')
     @route(r'^(?P<year>\d+)/(?P<month>\d{2})/$')
-    @route(r'^(?P<year>\d+)/0(?P<month>\d{1})/$')
+    @route(r'^(?P<year>\d+)/0(?P<month>\d{1})/$')  # A subset of the previous pattern, included for the URL reverser
     def posts_by_date(self, request, year, month=None):
         if month is None:
             posts = self.posts.live().filter(pub_date__year=int(year))
@@ -126,9 +126,6 @@ class BlogIndex(RoutablePageMixin, BasePage):
     def posts(self):
         return BlogPost.objects.child_of(self)
 
-    _year_regex = re.compile(r'^\d+$')
-    _month_regex = re.compile(r'^\d{2}$')
-
     def route(self, request, path_components):
         """
         Kludge to insert the publication year and month into BlogPost URLs.
@@ -143,7 +140,7 @@ class BlogIndex(RoutablePageMixin, BasePage):
             year, month, child_slug = path_components[:3]
             remaining_components = path_components[3:]
 
-            if self._year_regex.match(year) and self._month_regex.match(month):
+            if re.match(r'^\d+$', year) and re.match(r'^\d{2}$', month):
                 try:
                     post = self.posts.get(slug=child_slug).specific
                 except Page.DoesNotExist:
@@ -240,14 +237,12 @@ class BlogPost(BasePage):
     @property
     def first_text_block(self):
         try:
-            return next(filter(lambda x: isinstance(x.block, RichTextBlock), self.body))
+            return next(block for block in self.body if isinstance(block.block, RichTextBlock))
         except StopIteration:
             return None
 
     @property
     def contains_math(self):
-        for block in self.body:
-            if isinstance(block.block, RichTextBlock):
-                if re.search(r'(?:\\\[.*\\\])|(?:\\\(.*\\\))', block.value.source):
-                    return True
-        return False
+        return any(isinstance(block.block, RichTextBlock)
+                   and re.search(r'(?:\\\[.*\\\])|(?:\\\(.*\\\))', block.value.source)
+                   for block in self.body)
