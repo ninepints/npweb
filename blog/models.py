@@ -61,13 +61,14 @@ class BlogIndex(RoutablePageMixin, BasePage):
 
     @route(r'^$')
     def all_posts(self, request):
-        return self.paginate(request, posts=self.posts.live(), view_name='all_posts', title=self.title)
+        return self.paginate(request, posts=self.posts.live(), view_name='all_posts',
+                             title=self.title, title_root=True)
 
     @route(r'^tag/(?P<tag>[\a-zA-Z0-9_-]+)/$')
     def posts_by_tag(self, request, tag):
         return self.paginate(request, posts=self.posts.live().filter(tags__name=tag),
                              view_name='posts_by_tag', view_kwargs={'tag': tag},
-                             title='Posts tagged "{}"'.format(tag), intro='')
+                             title='Posts tagged "{}"'.format(tag), hero_title='#{}'.format(tag))
 
     @route(r'^(?P<year>\d+)/$')
     @route(r'^(?P<year>\d+)/(?P<month>\d{2})/$')
@@ -82,8 +83,7 @@ class BlogIndex(RoutablePageMixin, BasePage):
             title = datetime.date(n_year, n_month, 1).strftime('%B %Y')
 
         return self.paginate(request, posts=posts,
-                             view_name='posts_by_date', view_kwargs={'year': year, 'month': month},
-                             title=title, intro='')
+                             view_name='posts_by_date', view_kwargs={'year': year, 'month': month}, title=title)
 
     def paginate(self, request, posts, view_name, view_kwargs=None, **kwargs):
         post_count = posts.count()

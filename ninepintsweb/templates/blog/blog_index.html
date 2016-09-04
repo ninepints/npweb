@@ -2,18 +2,10 @@
 
 {% load wagtailcore_tags %}
 
-{% block title %}{{ title }}{% endblock %}
-
 {% block extra_js %}
     {% if any_post_contains_math %}
         {% include "mathjax.html" %}
     {% endif %}
-{% endblock %}
-
-{% block hero_content %}
-    <div class="col_container">
-        <h1 class="col8">{{ title }}</h1>
-    </div>
 {% endblock %}
 
 {% block content %}
@@ -26,12 +18,20 @@
                 {% include "blog/post_body.html" %}
                 {% include "blog/post_meta.html" %}
             {% else %}
-                <div class="col_container"><div class="col8">
-                    {{ post.first_text_block }}
+                <div class="col_container marginless"><div class="col8">
+                    {% with post.first_text_block as first_block %}
+                        {% if first_block %}
+                            {% include_block first_block %}
+                        {% else %}
+                            <p class="faded sans_serif marginless">No text content</p>
+                        {% endif %}
+                    {% endwith %}
                 </div></div>
                 {% include "blog/post_meta.html" %}
             {% endif %}
         </article>
+    {% empty %}
+        <h2 class="faded center sans_serif">No posts to show</h2>
     {% endfor %}
 
     <div class="col_container marginless">

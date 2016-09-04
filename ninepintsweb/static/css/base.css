@@ -248,7 +248,7 @@ ol
     list-style-type: none;
 }
 
-p.faded, .faded a:any-link
+.faded, .faded a:any-link
 {
     color: rgb(166,165,174);
 }
@@ -256,6 +256,11 @@ p.faded, .faded a:any-link
 .faded a:any-link:active, a.faded:any-link:active
 {
     color: rgb(148,147,155);
+}
+
+.center
+{
+    text-align: center;
 }
 
 /* Hero, nav, stuff at the top of the page */
