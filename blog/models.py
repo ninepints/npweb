@@ -154,7 +154,7 @@ class BlogIndex(RoutablePageMixin, BasePage):
                         raise Http404
 
                     # Redirect to the canonical url if the request included incorrect dates
-                    if post.pub_date.year != int(year) or post.pub_date.month != int(month):
+                    if str(post.pub_date.year) != year or '{:02}'.format(post.pub_date.month) != month:
                         canonical_post_url = post.url
                         if remaining_components:
                             canonical_post_url += '/'.join(remaining_components) + '/'
