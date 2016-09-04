@@ -111,7 +111,7 @@ body
 {
     font-size: 1.25rem;
     line-height: 1.75rem;
-    color: rgb(60,54,63);
+    color: hsl(280, 8%, 23%);
     font-family: 'Brando', sans-serif;
 }
 
@@ -140,6 +140,20 @@ p
     margin: 1.75rem 0;
 }
 
+pre
+{
+    font-size: 0.75rem;
+    line-height: 0.875rem;
+    margin: 1.75rem 0;
+    overflow-x: scroll;
+}
+
+pre,
+code
+{
+    font-family: 'Menlo', monospace;
+}
+
 .sans_serif
 {
     font-family: "Brando Sans Light";
@@ -156,22 +170,11 @@ p
 }
 
 
-/* For small computers */
-
-@media (max-width: 639px)
-{
-    html
-    {
-        font-size: 0.9rem;
-    }
-}
-
-
-/* Miscellany */
+/* Miscellanous element styles */
 
 a:any-link
 {
-    color: rgb(57,141,255);
+    color: hsl(215, 100%, 61%);
     text-decoration: none;
 }
 
@@ -182,7 +185,7 @@ a:any-link:hover
 
 a:any-link:active
 {
-    color: rgb(48,119,215);
+    color: hsl(215, 100%, 55%);
 }
 
 a.blocklink
@@ -195,13 +198,13 @@ a.blocklink
 
 a.blocklink:any-link:hover
 {
-    background-color: rgb(245,245,245);
+    background-color: hsl(280, 6%, 97%);
     text-decoration: none;
 }
 
 a.blocklink:any-link:active
 {
-    background-color: rgb(237,237,237);
+    background-color: hsl(280, 6%, 95%);
 }
 
 .blocklink > p
@@ -248,14 +251,16 @@ ol
     list-style-type: none;
 }
 
-.faded, .faded a:any-link
+.faded,
+.faded a:any-link
 {
-    color: rgb(166,165,174);
+    color: hsl(247, 5%, 66%);
 }
 
-.faded a:any-link:active, a.faded:any-link:active
+.faded a:any-link:active,
+a.faded:any-link:active
 {
-    color: rgb(148,147,155);
+    color: hsl(247, 5%, 60%);
 }
 
 .center
@@ -263,11 +268,17 @@ ol
     text-align: center;
 }
 
+.marginless
+{
+    margin: 0;
+}
+
+
 /* Hero, nav, stuff at the top of the page */
 
 #hero
 {
-    background-color: rgb(60,54,63);
+    background-color: hsl(280, 8%, 23%);
     color: white;
 }
 
@@ -289,8 +300,8 @@ ol
     background-image: linear-gradient(
         to bottom,
         transparent 0%,
-        rgba(60,54,63,0.35) 11rem,
-        rgba(60,54,63,0.35) 100%
+        hsla(280, 8%, 23%, 0.35) 11rem,
+        hsla(280, 8%, 23%, 0.35) 100%
     );
     margin-top: 5.25rem;
     padding-top: 11rem;
@@ -298,7 +309,7 @@ ol
 
 #main_nav
 {
-    background-color: rgb(60,54,63);
+    background-color: hsl(280, 8%, 23%);
     color: white;
 }
 
@@ -330,7 +341,31 @@ ol
 
 #main_nav a:any-link:hover
 {
-    background-color: rgb(88,87,92);
+    background-color: hsl(280, 6%, 32%);
     text-decoration: none;
+}
+
+
+/* Colored sections */
+
+.section_lightgray
+{
+    background-color: hsl(280, 6%, 97%);
+}
+
+.section_lightgray > .col_container > *
+{
+    background-color: hsl(280, 6%, 95%);
+}
+
+
+/* For small computers */
+
+@media (max-width: 639px)
+{
+    html
+    {
+        font-size: 0.9rem;
+    }
 }
 

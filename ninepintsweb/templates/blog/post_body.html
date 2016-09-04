@@ -1,5 +1,13 @@
+{% load wagtailcore_tags %}
+
 {% for block in post.body %}
-    <div class="col_container{% if not forloop.first %} marginless{% endif %}"><div class="col8">
-        {{ block }}
-    </div></div>
+    {% if block.block_type == 'code' %}
+        <div class="section_lightgray"><div class="col_container"><div class="col8">
+            {% include_block block %}
+        </div></div></div>
+    {% else %}
+        <div class="col_container{% if not forloop.first %} marginless{% endif %}"><div class="col8">
+                {% include_block block %}
+        </div></div>
+    {% endif %}
 {% endfor %}

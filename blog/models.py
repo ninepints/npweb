@@ -22,6 +22,8 @@ from wagtail.wagtailembeds.blocks import EmbedBlock
 from wagtail.wagtailimages.blocks import ImageChooserBlock
 from wagtail.wagtailimages.edit_handlers import ImageChooserPanel
 
+from .blocks import CodeBlock
+
 
 class ResponseOverrideWrapper(object):
     """
@@ -114,12 +116,18 @@ class BlogIndex(RoutablePageMixin, BasePage):
 
         return Page.serve(self, request, posts=posts,
                           prev_page_url=prev_page_url, next_page_url=next_page_url,
-                          any_post_contains_math=any(post.contains_math for post in posts),
                           **kwargs)
 
     def get_context(self, request, *args, **kwargs):
         context = super().get_context(request, *args, **kwargs)
+
+        posts = kwargs['posts']
+        full_posts = context.get('full_posts', False)
+        context['includes_math'] = any(post.contains_math if full_posts else post.first_text_block_contains_math
+                                       for post in posts)
+
         context.update(kwargs)
+
         return context
 
     @property
@@ -189,7 +197,8 @@ class BlogPost(BasePage):
         ('text', RichTextBlock()),
         ('image', ImageChooserBlock()),
         ('embed', EmbedBlock()),
-        ('document', DocumentChooserBlock())
+        ('document', DocumentChooserBlock()),
+        ('code', CodeBlock())
     ])
     tags = ClusterTaggableManager(through=BlogPostTag, blank=True)
 
@@ -243,6 +252,18 @@ class BlogPost(BasePage):
 
     @property
     def contains_math(self):
-        return any(isinstance(block.block, RichTextBlock)
-                   and re.search(r'(?:\\\[.*\\\])|(?:\\\(.*\\\))', block.value.source)
-                   for block in self.body)
+        return any(self.block_contains_math(block) for block in self.body)
+
+    @property
+    def first_text_block_contains_math(self):
+        first_text_block = self.first_text_block
+        return first_text_block is not None and self.block_contains_math(first_text_block)
+
+    @staticmethod
+    def block_contains_math(block):
+        return (isinstance(block.block, RichTextBlock) and
+                re.search(r'(?:\\\[.*\\\])|(?:\\\(.*\\\))', block.value.source))
+
+    @property
+    def contains_code(self):
+        return any(isinstance(block.block, CodeBlock) for block in self.body)
