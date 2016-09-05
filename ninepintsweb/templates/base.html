@@ -43,8 +43,19 @@
 
         {% block content %}{% endblock %}
 
-        <script type="text/javascript" src="{% static 'lib/jquery-2.2.3.min.js' %}"></script>
-        <script type="text/javascript" src="{% static 'js/parallax.js' %}"></script>
+        {% if page.hero_image %}
+            <script type="text/javascript" src="{% static 'lib/jquery-2.2.3.min.js' %}"></script>
+            <script type="text/javascript">//<![CDATA[
+                $(function() {
+                    var doc = $(document), hero = $('#hero');
+                    if (!hero.hasClass('with_image')) return;
+                    doc.on('scroll', function(event) {
+                        var offset = Math.max(0, doc.scrollTop() / 3);
+                        hero.css({'background-position': '50% ' + offset + 'px'})
+                    });
+                });
+            //]]></script>
+        {% endif %}
         {% block extra_js %}{% endblock %}
     </body>
 </html>
