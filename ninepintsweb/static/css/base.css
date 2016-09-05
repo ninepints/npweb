@@ -98,12 +98,6 @@ nav
     flex: 0 1 960px;
 }
 
-.full_bleed,
-.full_bleed > img
-{
-    width: 100%;
-}
-
 
 /* Typography */
 
@@ -293,6 +287,9 @@ a.faded:any-link:active
     background-size: cover;
     background-position: 50% 0;
     overflow: hidden;
+    display: flex;
+    flex-direction: column-reverse;
+    min-height: 80vh;
 }
 
 #hero_gradient
@@ -303,8 +300,9 @@ a.faded:any-link:active
         hsla(280, 8%, 23%, 0.35) 11rem,
         hsla(280, 8%, 23%, 0.35) 100%
     );
-    margin-top: 5.25rem;
+    margin-top: -11rem;
     padding-top: 11rem;
+    width: 100%;
 }
 
 #main_nav
