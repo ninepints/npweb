@@ -1,6 +1,6 @@
 {% load wagtailcore_tags %}
 
-{% for block in post.body %}
+{% for block in stream %}
     {% if block.block_type == 'code' %}
         <div class="section_lightgray"><div class="col_container"><div class="col8">
             {% include_block block %}

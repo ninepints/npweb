@@ -1,0 +1,7 @@
+{% extends "blog/content_page.html" %}
+
+{% block content %}
+    <article>
+        {% include "blog/content_stream.html" with stream=page.body %}
+    </article>
+{% endblock %}

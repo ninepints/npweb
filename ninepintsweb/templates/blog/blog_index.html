@@ -14,8 +14,8 @@
                 <h2 class="col8 sans_serif"><a href="{% pageurl post %}">{{ post.title }}</a></h2>
             </div>
             {% if full_posts %}
-                {% include "blog/post_body.html" %}
-                {% include "blog/post_meta.html" %}
+                {% include "blog/content_stream.html" with stream=post.body %}
+                {% include "blog/blog_post_meta.html" %}
             {% else %}
                 <div class="col_container marginless"><div class="col8">
                     {% with post.first_text_block as first_block %}
@@ -26,7 +26,7 @@
                         {% endif %}
                     {% endwith %}
                 </div></div>
-                {% include "blog/post_meta.html" %}
+                {% include "blog/blog_post_meta.html" %}
             {% endif %}
         </article>
     {% empty %}

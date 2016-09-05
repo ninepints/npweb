@@ -13,16 +13,12 @@ from taggit.models import TaggedItemBase
 
 from wagtail.contrib.wagtailroutablepage.models import RoutablePageMixin, route
 from wagtail.wagtailadmin.edit_handlers import FieldPanel, StreamFieldPanel
-from wagtail.wagtailcore.blocks import RichTextBlock
 from wagtail.wagtailcore.models import Page
 from wagtail.wagtailcore.fields import StreamField
 from wagtail.wagtailcore.url_routing import RouteResult
-from wagtail.wagtaildocs.blocks import DocumentChooserBlock
-from wagtail.wagtailembeds.blocks import EmbedBlock
-from wagtail.wagtailimages.blocks import ImageChooserBlock
 from wagtail.wagtailimages.edit_handlers import ImageChooserPanel
 
-from .blocks import CodeBlock
+from .blocks import ContentBlock, ContentMethodsMixin
 
 
 class ResponseOverrideWrapper(object):
@@ -43,6 +39,8 @@ class ResponseOverrideWrapper(object):
 
 
 class BasePage(Page):
+    is_creatable = False
+
     hero_image = models.ForeignKey(
         'wagtailimages.Image',
         null=True,
@@ -56,9 +54,15 @@ class BasePage(Page):
     ]
 
 
-class BlogIndex(RoutablePageMixin, BasePage):
-    subpage_types = ['blog.BlogPost']
+class AboutPage(BasePage, ContentMethodsMixin):
+    body = StreamField(ContentBlock())
 
+    content_panels = BasePage.content_panels + [
+        StreamFieldPanel('body')
+    ]
+
+
+class BlogIndex(RoutablePageMixin, BasePage):
     posts_per_page = 3
 
     @route(r'^$')
@@ -189,17 +193,11 @@ class BlogPostTag(TaggedItemBase):
     content_object = ParentalKey('blog.BlogPost', related_name='tagged_items')
 
 
-class BlogPost(BasePage):
+class BlogPost(BasePage, ContentMethodsMixin):
     parent_page_types = ['blog.BlogIndex']
 
     pub_date = models.DateTimeField(verbose_name='Publication date')
-    body = StreamField([
-        ('text', RichTextBlock()),
-        ('image', ImageChooserBlock()),
-        ('embed', EmbedBlock()),
-        ('document', DocumentChooserBlock()),
-        ('code', CodeBlock())
-    ])
+    body = StreamField(ContentBlock())
     tags = ClusterTaggableManager(through=BlogPostTag, blank=True)
 
     content_panels = BasePage.content_panels + [
@@ -242,28 +240,3 @@ class BlogPost(BasePage):
                 .filter(pub_date__gte=self.pub_date)
                 .order_by('pub_date')
                 .first())
-
-    @property
-    def first_text_block(self):
-        try:
-            return next(block for block in self.body if isinstance(block.block, RichTextBlock))
-        except StopIteration:
-            return None
-
-    @property
-    def contains_math(self):
-        return any(self.block_contains_math(block) for block in self.body)
-
-    @property
-    def first_text_block_contains_math(self):
-        first_text_block = self.first_text_block
-        return first_text_block is not None and self.block_contains_math(first_text_block)
-
-    @staticmethod
-    def block_contains_math(block):
-        return (isinstance(block.block, RichTextBlock) and
-                re.search(r'(?:\\\[.*\\\])|(?:\\\(.*\\\))', block.value.source))
-
-    @property
-    def contains_code(self):
-        return any(isinstance(block.block, CodeBlock) for block in self.body)

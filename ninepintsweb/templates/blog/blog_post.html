@@ -1,24 +1,11 @@
-{% extends "base.html" %}
+{% extends "blog/content_page.html" %}
 
-{% load static %}
 {% load wagtailcore_tags %}
-
-{% block extra_css %}
-    {{ block.super }}
-    {% if page.contains_code %}
-        <link rel="stylesheet" type="text/css" href="{% static 'css/pygments.css' %}"/>
-    {% endif %}
-{% endblock %}
-
-{% block extra_js %}
-    {{ block.super }}
-    {% if page.contains_math %}{% include "mathjax.html" %}{% endif %}
-{% endblock %}
 
 {% block content %}
     <article>
-        {% include "blog/post_body.html" with post=page %}
-        {% include "blog/post_meta.html" with post=page %}
+        {% include "blog/content_stream.html" with stream=page.body %}
+        {% include "blog/blog_post_meta.html" with post=page %}
     </article>
     <div class="col_container marginless">
         {% if page.next_post %}
