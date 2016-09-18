@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     'modelcluster',
     'compressor',
     'taggit',
+    'django_medusa',
 
     'django.contrib.admin',
     'django.contrib.auth',
@@ -151,3 +152,10 @@ MEDIA_URL = '/media/'
 # Wagtail settings
 
 WAGTAIL_SITE_NAME = 'ninepintsweb'
+
+
+# Django-medusa settings
+
+MEDUSA_RENDERER_CLASS = 'django_medusa.renderers.DiskStaticSiteRenderer'
+MEDUSA_COLLECT_STATIC = True
+MEDUSA_DEPLOY_DIR = os.path.join(BASE_DIR, 'build')

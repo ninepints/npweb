@@ -76,9 +76,9 @@ class BlogIndex(RoutablePageMixin, BasePage):
                              view_name='posts_by_tag', view_kwargs={'tag': tag},
                              title='Posts tagged "{}"'.format(tag), hero_title='#{}'.format(tag))
 
-    @route(r'^(?P<year>\d+)/$')
-    @route(r'^(?P<year>\d+)/(?P<month>\d{2})/$')
-    @route(r'^(?P<year>\d+)/0(?P<month>\d{1})/$')  # A subset of the previous pattern, included for the URL reverser
+    @route(r'^(?P<year>[1-9]\d*)/$')
+    @route(r'^(?P<year>[1-9]\d*)/(?P<month>1[0-2])/$')
+    @route(r'^(?P<year>[1-9]\d*)/0(?P<month>[1-9])/$')
     def posts_by_date(self, request, year, month=None):
         if month is None:
             posts = self.posts.live().filter(pub_date__year=int(year))
@@ -88,8 +88,9 @@ class BlogIndex(RoutablePageMixin, BasePage):
             posts = self.posts.live().filter(pub_date__year=n_year, pub_date__month=n_month)
             title = datetime.date(n_year, n_month, 1).strftime('%B %Y')
 
-        return self.paginate(request, posts=posts,
-                             view_name='posts_by_date', view_kwargs={'year': year, 'month': month}, title=title)
+        return self.paginate(request, title=title, posts=posts,
+                             view_name='posts_by_date',
+                             view_kwargs={'year': year} if month is None else {'year': year, 'month': month})
 
     def paginate(self, request, posts, view_name, view_kwargs=None, **kwargs):
         post_count = posts.count()
