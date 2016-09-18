@@ -3,8 +3,7 @@ import math
 import re
 
 from django.db import models
-from django.http import Http404, HttpResponsePermanentRedirect
-from django.http import HttpResponseRedirect
+from django.http import Http404, HttpResponseRedirect, HttpResponsePermanentRedirect
 
 from modelcluster.fields import ParentalKey
 from modelcluster.contrib.taggit import ClusterTaggableManager
@@ -19,6 +18,9 @@ from wagtail.wagtailcore.url_routing import RouteResult
 from wagtail.wagtailimages.edit_handlers import ImageChooserPanel
 
 from .blocks import ContentBlock, ContentMethodsMixin
+
+
+pagination_regex = r'(?:page/(?P<page>[1-9]\d+|[2-9])/)?'
 
 
 class ResponseOverrideWrapper(object):
@@ -65,57 +67,65 @@ class AboutPage(BasePage, ContentMethodsMixin):
 class BlogIndex(RoutablePageMixin, BasePage):
     posts_per_page = 3
 
-    @route(r'^$')
-    def all_posts(self, request):
-        return self.paginate(request, posts=self.posts.live(), view_name='all_posts',
+    @route(r'^' + pagination_regex + '$')
+    def all_posts(self, request, page=None):
+        page = page and int(page)
+        return self.paginate(request, posts=self.public_posts,
+                             view_name='all_posts', view_kwargs={'page': page},
                              title=self.title, title_root=True)
 
-    @route(r'^tag/(?P<tag>[\a-zA-Z0-9_-]+)/$')
-    def posts_by_tag(self, request, tag):
-        return self.paginate(request, posts=self.posts.live().filter(tags__name=tag),
-                             view_name='posts_by_tag', view_kwargs={'tag': tag},
+    @route(r'^tag/(?P<tag>[\a-zA-Z0-9_-]+)/' + pagination_regex + r'$')
+    def posts_by_tag(self, request, tag, page=None):
+        page = page and int(page)
+        return self.paginate(request, posts=self.public_posts.filter(tags__name=tag),
+                             view_name='posts_by_tag', view_kwargs={'tag': tag, 'page': page},
                              title='Posts tagged "{}"'.format(tag), hero_title='#{}'.format(tag))
 
-    @route(r'^(?P<year>[1-9]\d*)/$')
-    @route(r'^(?P<year>[1-9]\d*)/(?P<month>1[0-2])/$')
-    @route(r'^(?P<year>[1-9]\d*)/0(?P<month>[1-9])/$')
-    def posts_by_date(self, request, year, month=None):
+    @route(r'^(?P<year>[1-9]\d*)/' + pagination_regex + r'$')
+    @route(r'^(?P<year>[1-9]\d*)/(?P<month>1[0-2])/' + pagination_regex + r'$')
+    @route(r'^(?P<year>[1-9]\d*)/0(?P<month>[1-9])/' + pagination_regex + r'$')
+    def posts_by_date(self, request, year, month=None, page=None):
+        year = int(year)
+        month = month and int(month)
+        page = page and int(page)
+
         if month is None:
-            posts = self.posts.live().filter(pub_date__year=int(year))
+            posts = self.public_posts.filter(pub_date__year=year)
             title = year
         else:
-            n_year, n_month = int(year), int(month)
-            posts = self.posts.live().filter(pub_date__year=n_year, pub_date__month=n_month)
-            title = datetime.date(n_year, n_month, 1).strftime('%B %Y')
+            posts = self.public_posts.filter(pub_date__year=year, pub_date__month=month)
+            title = datetime.date(year, month, 1).strftime('%B %Y')
 
         return self.paginate(request, title=title, posts=posts,
                              view_name='posts_by_date',
-                             view_kwargs={'year': year} if month is None else {'year': year, 'month': month})
+                             view_kwargs={'year': year, 'month': month, 'page': page})
 
     def paginate(self, request, posts, view_name, view_kwargs=None, **kwargs):
         post_count = posts.count()
         max_page = max(math.ceil(post_count / self.posts_per_page), 1)
-        base_url = self.url + self.reverse_subpage(view_name, kwargs=view_kwargs)
+        view_kwargs = {k: v for k, v in view_kwargs.items() if v is not None}
+        page = view_kwargs.get('page', 1)
 
-        try:
-            page = int(request.GET.get('page', 1))
-        except (TypeError, ValueError):
-            page = 1
-        if page < 1 or page > max_page == 1:
-            return HttpResponseRedirect(base_url)
+        if page > max_page == 1:
+            del view_kwargs['page']
+            return HttpResponseRedirect(self.url + self.reverse_subpage(view_name, kwargs=view_kwargs))
         elif page > max_page:
-            return HttpResponseRedirect(base_url + '?page=' + str(max_page))
+            view_kwargs['page'] = max_page
+            return HttpResponseRedirect(self.url + self.reverse_subpage(view_name, kwargs=view_kwargs))
 
         page_start_index = (page - 1) * self.posts_per_page
         page_end_index = page * self.posts_per_page
 
         prev_page_url = next_page_url = None
         if page == 2:
-            prev_page_url = base_url
+            del view_kwargs['page']
+            prev_page_url = self.url + self.reverse_subpage(view_name, kwargs=view_kwargs)
         elif page > 2:
-            prev_page_url = base_url + '?page=' + str(page - 1)
+            view_kwargs['page'] = page - 1
+            prev_page_url = self.url + self.reverse_subpage(view_name, kwargs=view_kwargs)
         if post_count > page_end_index:
-            next_page_url = base_url + '?page=' + str(page + 1)
+            view_kwargs['page'] = page + 1
+            next_page_url = self.url + self.reverse_subpage(view_name, kwargs=view_kwargs)
 
         posts = posts.specific().order_by('-pub_date')[page_start_index:page_end_index]
 
@@ -138,6 +148,10 @@ class BlogIndex(RoutablePageMixin, BasePage):
     @property
     def posts(self):
         return BlogPost.objects.child_of(self)
+
+    @property
+    def public_posts(self):
+        return self.posts.live().public()
 
     def route(self, request, path_components):
         """
@@ -224,8 +238,7 @@ class BlogPost(BasePage, ContentMethodsMixin):
 
     @property
     def prev_post(self):
-        return (self.get_parent().specific.posts
-                .live()
+        return (self.get_parent().specific.public_posts
                 .not_page(self)
                 .specific()
                 .filter(pub_date__lte=self.pub_date)
@@ -234,8 +247,7 @@ class BlogPost(BasePage, ContentMethodsMixin):
 
     @property
     def next_post(self):
-        return (self.get_parent().specific.posts
-                .live()
+        return (self.get_parent().specific.public_posts
                 .not_page(self)
                 .specific()
                 .filter(pub_date__gte=self.pub_date)
