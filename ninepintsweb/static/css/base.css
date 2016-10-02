@@ -7,6 +7,36 @@ nav
     margin: 0;
 }
 
+.parallax_section
+{
+    background-color: white;
+}
+
+.layer0
+{
+    z-index: 0;
+}
+
+.layer1
+{
+    z-index: -1;
+}
+
+.layer2
+{
+    z-index: -2;
+}
+
+.layer3
+{
+    z-index: -3;
+}
+
+.layer4
+{
+    z-index: -4;
+}
+
 .col_container
 {
     display: flex;
@@ -40,61 +70,73 @@ nav
 
 .col1
 {
+    max-width: 100%;
     flex: 0 1 80px;
 }
 
 .col2
 {
+    max-width: 100%;
     flex: 0 1 160px;
 }
 
 .col3
 {
+    max-width: 100%;
     flex: 0 1 240px;
 }
 
 .col4
 {
+    max-width: 100%;
     flex: 0 1 320px;
 }
 
 .col5
 {
+    max-width: 100%;
     flex: 0 1 400px;
 }
 
 .col6
 {
+    max-width: 100%;
     flex: 0 1 480px;
 }
 
 .col7
 {
+    max-width: 100%;
     flex: 0 1 560px;
 }
 
 .col8
 {
+    max-width: 100%;
     flex: 0 1 640px;
 }
 
 .col9
 {
+    max-width: 100%;
     flex: 0 1 720px;
 }
 
 .col10
 {
+    max-width: 100%;
     flex: 0 1 800px;
 }
 
 .col11
 {
+    max-width: 100%;
     flex: 0 1 880px;
 }
 
 .col12
 {
+    max-width: 100%;
     flex: 0 1 960px;
 }
 
@@ -107,6 +149,7 @@ body
     line-height: 1.75rem;
     color: hsl(280, 8%, 23%);
     font-family: 'Brando', sans-serif;
+    font-weight: normal;
 }
 
 h1
@@ -127,11 +170,21 @@ h2
     font-weight: normal;
 }
 
+h3
+{
+    font-size: 1.5rem;
+    line-height: 3.5rem;
+    margin: 1.75rem 0;
+    font-family: 'Brando', sans-serif;
+    font-weight: normal;
+}
+
 p
 {
     font-size: 1.25rem;
     line-height: 1.75rem;
     margin: 1.75rem 0;
+    font-weight: normal;
 }
 
 pre
@@ -219,22 +272,26 @@ a.blocklink:any-link:active
 
 .blocklink.prev > p:first-child::before
 {
-    content: "◀ ";
+    content: "‹ ";
     display: block;
     position: absolute;
     left: 1.5rem;
     top: 50%;
-    margin-top: -0.875rem;
+    margin-top: -1.75rem;
+    font-size: 2.5rem;
+    line-height: 3.5rem;
 }
 
 .blocklink.next > p:last-child::after
 {
-    content: " ▶";
+    content: " ›";
     display: block;
     position: absolute;
     right: 1.5rem;
     top: 50%;
-    margin-top: -0.875rem;
+    margin-top: -1.75rem;
+    font-size: 2.5rem;
+    line-height: 3.5rem;
 }
 
 ul,
@@ -281,6 +338,7 @@ a.faded:any-link:active
 {
     background-color: hsl(280, 8%, 23%);
     color: white;
+    position: relative;
 }
 
 #hero h1
@@ -293,7 +351,7 @@ a.faded:any-link:active
     background-color: transparent;
     display: flex;
     flex-direction: column-reverse;
-    min-height: 80vh;
+    min-height: 60vh;
 }
 
 #hero_image
@@ -400,45 +458,35 @@ a.faded:any-link:active
         position: relative;
         transform: translateZ(0);
         transform-style: preserve-3d;
-        background-color: white;
-    }
-
-    .layer0,
-    .layer1,
-    .layer2,
-    .layer3,
-    .layer4
-    {
-        transform-origin: 100% 0%;
     }
 
     .layer0
     {
+        transform-origin: 100% 0%;
         transform: translateZ(0);
-        z-index: 0;
     }
 
     .layer1
     {
+        transform-origin: 100% 0%;
         transform: translateZ(-40px) scale(1.25);
-        z-index: -1;
     }
 
     .layer2
     {
+        transform-origin: 100% 0%;
         transform: translateZ(-80px) scale(1.5);
-        z-index: -2;
     }
 
     .layer3
     {
+        transform-origin: 100% 0%;
         transform: translateZ(-160px) scale(2.0);
-        z-index: -3;
     }
 
     .layer4
     {
+        transform-origin: 100% 0%;
         transform: translateZ(-320px) scale(3.0);
-        z-index: -4;
     }
 }

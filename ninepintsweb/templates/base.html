@@ -6,6 +6,8 @@
     <head>
         <title>{% block title %}{% if title_root %}ninepints{% else %}{% firstof title page.seo_title page.title %} - ninepints{% endif %}{% endblock %}</title>
 
+        <meta name="viewport" content="width=device-width">
+
         <link rel="stylesheet" type="text/css" href="{% static 'css/base.css' %}"/>
         <link rel="stylesheet" type="text/css" href="{% static 'css/brando.css' %}"/>
         <link rel="stylesheet" type="text/css" href="{% static 'css/brandosans.css' %}"/>
