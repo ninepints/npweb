@@ -267,6 +267,13 @@ a.faded:any-link:active
     margin: 0;
 }
 
+.cover_img
+{
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: 50% 0;
+}
+
 
 /* Hero, nav, stuff at the top of the page */
 
@@ -283,13 +290,19 @@ a.faded:any-link:active
 
 #hero.with_image
 {
-    background-repeat: no-repeat;
-    background-size: cover;
-    background-position: 50% 0;
-    overflow: hidden;
+    background-color: transparent;
     display: flex;
     flex-direction: column-reverse;
     min-height: 80vh;
+}
+
+#hero_image
+{
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
 }
 
 #hero_gradient
@@ -357,7 +370,7 @@ a.faded:any-link:active
 }
 
 
-/* For small computers */
+/* Media queries (for small computers) */
 
 @media (max-width: 639px)
 {
@@ -367,3 +380,65 @@ a.faded:any-link:active
     }
 }
 
+@supports ((perspective: 160px) and (not (-webkit-overflow-scrolling: touch)))
+{
+    .parallax_container
+    {
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        perspective: 160px;
+        perspective-origin: 100% 0%;
+        overflow-x: hidden;
+        overflow-y: auto;
+    }
+
+    .parallax_section
+    {
+        position: relative;
+        transform: translateZ(0);
+        transform-style: preserve-3d;
+        background-color: white;
+    }
+
+    .layer0,
+    .layer1,
+    .layer2,
+    .layer3,
+    .layer4
+    {
+        transform-origin: 100% 0%;
+    }
+
+    .layer0
+    {
+        transform: translateZ(0);
+        z-index: 0;
+    }
+
+    .layer1
+    {
+        transform: translateZ(-40px) scale(1.25);
+        z-index: -1;
+    }
+
+    .layer2
+    {
+        transform: translateZ(-80px) scale(1.5);
+        z-index: -2;
+    }
+
+    .layer3
+    {
+        transform: translateZ(-160px) scale(2.0);
+        z-index: -3;
+    }
+
+    .layer4
+    {
+        transform: translateZ(-320px) scale(3.0);
+        z-index: -4;
+    }
+}
