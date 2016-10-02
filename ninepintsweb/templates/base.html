@@ -15,47 +15,43 @@
     <body>
         {% wagtailuserbar %}
 
-        {% if page.hero_image %}
-            {% image page.hero_image original as hero_image %}
-            <header id="hero" class="with_image" style="background-image: url({{ hero_image.url }})">
-                <div id="hero_gradient">
-        {% else %}
-            <header id="hero">
-        {% endif %}
+        <div class="parallax_container">
+            <header id="hero"{% if page.hero_image %} class="with_image parallax_section"{% endif %}>
+                {% if page.hero_image %}
+                    {% image page.hero_image original as hero_image %}
+                    <div id="hero_image" class="cover_img layer1" style="background-image: url({{ hero_image.url }})"></div>
+                    <div id="hero_gradient" class="layer0">
+                {% endif %}
 
-        {% block hero_content %}
-            <div class="col_container">
-                <h1 class="col8">{% firstof hero_title title page.title "ninepints" %}</h1>
-            </div>
-        {% endblock %}
+                {% block hero_content %}
+                    <div class="col_container">
+                        <h1 class="col8">{% firstof hero_title title page.title "ninepints" %}</h1>
+                    </div>
+                {% endblock %}
 
-        {% if page.hero_image %}
-            </div>
-        {% endif %}
-        </header>
+                {% if page.hero_image %}
+                    </div>
+                {% endif %}
+            </header>
 
-        <nav id="main_nav"><div class="col_container">
+            {% if page.hero_image %}
+                <div class="parallax_section">
+            {% endif %}
+
+            <nav id="main_nav"><div class="col_container">
                 <ul class="col8">
                     <li><a href="{% pageurl request.site.root_page %}">Home</a></li>
                     <li><a href="{% slugurl 'about' %}">About</a></li>
                 </ul>
-        </div></nav>
+            </div></nav>
 
-        {% block content %}{% endblock %}
+            {% block content %}{% endblock %}
 
-        {% if page.hero_image %}
-            <script type="text/javascript" src="{% static 'lib/jquery-2.2.3.min.js' %}"></script>
-            <script type="text/javascript">//<![CDATA[
-                $(function() {
-                    var doc = $(document), hero = $('#hero');
-                    if (!hero.hasClass('with_image')) return;
-                    doc.on('scroll', function(event) {
-                        var offset = Math.max(0, doc.scrollTop() / 3);
-                        hero.css({'background-position': '50% ' + offset + 'px'})
-                    });
-                });
-            //]]></script>
-        {% endif %}
+            {% if page.hero_image %}
+                </div>
+            {% endif %}
+        </div>
+
         {% block extra_js %}{% endblock %}
     </body>
 </html>
