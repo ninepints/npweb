@@ -297,9 +297,21 @@ a.blocklink:any-link:active
 ul,
 ol
 {
+    margin: 1.75rem 0;
+    padding-left: 3rem;
+}
+
+ul.bulletless,
+ol.bulletless
+{
     margin: 0;
-    padding: 0;
     list-style-type: none;
+}
+
+ul.bulletless:not(.col_container > *),
+ol.bulletless:not(.col_container > *)
+{
+    padding: 0;
 }
 
 .faded,
