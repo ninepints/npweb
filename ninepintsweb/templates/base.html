@@ -40,10 +40,10 @@
                 <div class="parallax_section">
             {% endif %}
 
-            <nav id="main_nav"><div class="col_container">
+            <nav id="main_nav"{% if page.hero_image %} class="with_image"{% endif %}><div class="col_container">
                 <ul class="col8 bulletless">
-                    <li><a href="{% pageurl request.site.root_page %}">Home</a></li>
-                    <li><a href="{% slugurl 'about' %}">About</a></li>
+                    <li><a href="{% pageurl request.site.root_page %}" class="blocklink sans_serif">Home</a></li>
+                    <li><a href="{% slugurl 'about' %}" class="blocklink sans_serif">About</a></li>
                 </ul>
             </div></nav>
 
