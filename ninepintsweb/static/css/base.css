@@ -65,78 +65,67 @@ nav
 {
     padding-left: 1rem;
     padding-right: 1rem;
+    max-width: 100%;
     box-sizing: border-box;
 }
 
 .col1
 {
-    max-width: 100%;
     flex: 0 1 80px;
 }
 
 .col2
 {
-    max-width: 100%;
     flex: 0 1 160px;
 }
 
 .col3
 {
-    max-width: 100%;
     flex: 0 1 240px;
 }
 
 .col4
 {
-    max-width: 100%;
     flex: 0 1 320px;
 }
 
 .col5
 {
-    max-width: 100%;
     flex: 0 1 400px;
 }
 
 .col6
 {
-    max-width: 100%;
     flex: 0 1 480px;
 }
 
 .col7
 {
-    max-width: 100%;
     flex: 0 1 560px;
 }
 
 .col8
 {
-    max-width: 100%;
     flex: 0 1 640px;
 }
 
 .col9
 {
-    max-width: 100%;
     flex: 0 1 720px;
 }
 
 .col10
 {
-    max-width: 100%;
     flex: 0 1 800px;
 }
 
 .col11
 {
-    max-width: 100%;
     flex: 0 1 880px;
 }
 
 .col12
 {
-    max-width: 100%;
     flex: 0 1 960px;
 }
 
@@ -187,18 +176,13 @@ p
     font-weight: normal;
 }
 
-pre
-{
-    font-size: 0.75rem;
-    line-height: 0.875rem;
-    margin: 1.75rem 0;
-    overflow-x: scroll;
-}
-
 pre,
 code
 {
+    font-size: 0.75rem;
+    line-height: 0.875rem;
     font-family: 'Menlo', monospace;
+    font-weight: normal;
 }
 
 .sans_serif
@@ -235,14 +219,6 @@ a:any-link:active
     color: hsl(215, 100%, 55%);
 }
 
-a.blocklink
-{
-    display: block;
-    margin: 1.75rem 0;
-    padding: 3.5rem 1rem;
-    position: relative;
-}
-
 a.blocklink:any-link:hover
 {
     background-color: hsl(280, 6%, 97%);
@@ -252,46 +228,6 @@ a.blocklink:any-link:hover
 a.blocklink:any-link:active
 {
     background-color: hsl(280, 6%, 95%);
-}
-
-.blocklink > p
-{
-    margin: 0;
-}
-
-.blocklink.prev > p
-{
-    padding-left: 3rem;
-}
-
-.blocklink.next > p
-{
-    padding-right: 3rem;
-    text-align: right;
-}
-
-.blocklink.prev > p:first-child::before
-{
-    content: "‹ ";
-    display: block;
-    position: absolute;
-    left: 1.5rem;
-    top: 50%;
-    margin-top: -1.75rem;
-    font-size: 2.5rem;
-    line-height: 3.5rem;
-}
-
-.blocklink.next > p:last-child::after
-{
-    content: " ›";
-    display: block;
-    position: absolute;
-    right: 1.5rem;
-    top: 50%;
-    margin-top: -1.75rem;
-    font-size: 2.5rem;
-    line-height: 3.5rem;
 }
 
 ul,
@@ -326,6 +262,17 @@ a.faded:any-link:active
     color: hsl(247, 5%, 60%);
 }
 
+pre
+{
+    display: inline-block;
+    margin: 1.75rem 0;
+}
+
+.pre_container
+{
+    overflow-x: scroll;
+}
+
 .center
 {
     text-align: center;
@@ -334,6 +281,12 @@ a.faded:any-link:active
 .marginless
 {
     margin: 0;
+}
+
+.padded
+{
+    padding-top: 1.75rem;
+    padding-bottom: 1.75rem;
 }
 
 .cover_img
@@ -348,8 +301,6 @@ a.faded:any-link:active
 
 #hero
 {
-    background-color: hsl(280, 8%, 23%);
-    color: white;
     position: relative;
 }
 
@@ -360,6 +311,7 @@ a.faded:any-link:active
 
 #hero.with_image
 {
+    color: white;
     background-color: transparent;
     display: flex;
     flex-direction: column-reverse;
@@ -388,12 +340,6 @@ a.faded:any-link:active
     width: 100%;
 }
 
-#main_nav
-{
-    background-color: hsl(280, 8%, 23%);
-    color: white;
-}
-
 #main_nav ul
 {
     overflow: hidden;
@@ -412,20 +358,81 @@ a.faded:any-link:active
 #main_nav a
 {
     display: inline-block;
-    font-size: 1.25rem;
-    line-height: 1.75rem;
     padding: 0.875rem 1rem;
-    color: white;
-    font-family: 'Brando Sans Light';
     text-transform: uppercase;
 }
 
 #main_nav a:any-link:hover
 {
-    background-color: hsl(280, 6%, 32%);
     text-decoration: none;
 }
 
+#main_nav.with_image
+{
+    background-color: hsl(280, 8%, 23%);
+}
+
+#main_nav.with_image a
+{
+    color: white;
+}
+
+#main_nav.with_image a:any-link:hover
+{
+    background-color: hsl(280, 6%, 32%);
+}
+
+#main_nav.with_image a:any-link:active
+{
+    color: hsl(0, 0%, 88%);
+    background-color: hsl(280, 6%, 30%);
+}
+
+
+/* Pagination, stuff at the bottom of the page */
+
+a.pagination
+{
+    display: block;
+    padding: 1.75rem 1rem;
+    position: relative;
+}
+
+.pagination > p
+{
+    margin: 0;
+}
+
+.pagination.prev > p
+{
+    padding-left: 2rem;
+}
+
+.pagination.next > p
+{
+    padding-right: 2rem;
+    text-align: right;
+}
+
+.pagination.prev > p:first-child::before
+{
+    content: "‹ ";
+    display: block;
+    position: absolute;
+    left: 1.5rem;
+    top: 50%;
+    margin-top: -0.875rem;
+}
+
+.pagination.next > p:last-child::after
+{
+    content: " ›";
+    display: block;
+    position: absolute;
+    right: 1.5rem;
+    top: 50%;
+    margin-top: -0.875rem;
+}
 
 /* Colored sections */
 

@@ -7,16 +7,16 @@
         {% include "blog/content_stream.html" with stream=page.body %}
         {% include "blog/blog_post_meta.html" with post=page %}
     </article>
-    <div class="col_container marginless">
+    <div class="col_container marginless padded">
         {% if page.next_post %}
-            <a class="col4 blocklink prev" href="{% pageurl page.next_post %}">
+            <a class="col4 blocklink sans_serif pagination prev" href="{% pageurl page.next_post %}">
                 <p>Next:</p><p>{{ page.next_post.title }}</p>
             </a>
         {% else %}
             <div class="col4"></div>
         {% endif %}
         {% if page.prev_post %}
-            <a class="col4 blocklink next" href="{% pageurl page.prev_post %}">
+            <a class="col4 blocklink sans_serif pagination next" href="{% pageurl page.prev_post %}">
                 <p>Previously:</p><p>{{ page.prev_post.title }}</p>
             </a>
         {% else %}

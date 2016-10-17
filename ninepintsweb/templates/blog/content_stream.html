@@ -2,7 +2,7 @@
 
 {% for block in stream %}
     {% if block.block_type == 'code' %}
-        <div class="section_lightgray"><div class="col_container"><div class="col8">
+        <div class="section_lightgray"><div class="col_container"><div class="col8 pre_container">
             {% include_block block %}
         </div></div></div>
     {% else %}
