@@ -359,7 +359,6 @@ pre
 {
     display: inline-block;
     padding: 0.875rem 1rem;
-    text-transform: uppercase;
 }
 
 #main_nav a:any-link:hover
