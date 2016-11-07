@@ -49,7 +49,6 @@ INSTALLED_APPS = [
     'wagtail.wagtailcore',
 
     'modelcluster',
-    'compressor',
     'taggit',
     'django_medusa',
 
