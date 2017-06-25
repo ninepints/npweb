@@ -16,8 +16,8 @@ class CodeBlock(StructBlock):
     language = ChoiceBlock(choices=[(name, name) for name in sorted(lexer[1][0] for lexer in get_all_lexers())],
                            required=False)
 
-    def get_context(self, value):
-        context = super().get_context(value)
+    def get_context(self, value, parent_context=None):
+        context = super().get_context(value, parent_context=parent_context)
 
         if value['language']:
             lexer = get_lexer_by_name(value['language'])
