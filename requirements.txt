@@ -1,4 +1,4 @@
-Django>=1.10,<1.11
-django-medusa==0.3.1
-Pygments>=2.1,<2.2
-wagtail>=1.7,<1.8
+Django>=1.11,<1.12
+Pygments>=2.2,<2.3
+wagtail>=1.10,<1.11
+wagtail-bakery>=0.1,<0.2
