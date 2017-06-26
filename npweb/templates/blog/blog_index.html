@@ -10,14 +10,14 @@
 {% block content %}
     {% for post in posts %}
         <article>
-            <div class="col_container marginless">
+            <div class="col_container alignleft marginless">
                 <h2 class="col8 sans_serif"><a href="{% pageurl post %}">{{ post.title }}</a></h2>
             </div>
             {% if full_posts %}
                 {% include "blog/content_stream.html" with stream=post.body %}
                 {% include "blog/blog_post_meta.html" %}
             {% else %}
-                <div class="col_container marginless"><div class="col8">
+                <div class="col_container alignleft marginless"><div class="col8">
                     {% with post.first_text_block as first_block %}
                         {% if first_block %}
                             {% include_block first_block %}
@@ -33,7 +33,7 @@
         <h2 class="faded center sans_serif">No posts to show</h2>
     {% endfor %}
 
-    <div class="col_container marginless padded">
+    <div class="col_container alignleft marginless padded">
         {% if prev_page_url %}
             <a class="col4 blocklink sans_serif pagination prev" href="{{ prev_page_url }}">
                 <p>Newer posts</p>

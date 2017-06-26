@@ -2,11 +2,11 @@
 
 {% for block in stream %}
     {% if block.block_type == 'code' %}
-        <div class="section_lightgray"><div class="col_container"><div class="col8 pre_container">
+        <div class="section_lightgray"><div class="col_container alignleft"><div class="col8 pre_container">
             {% include_block block %}
         </div></div></div>
     {% else %}
-        <div class="col_container{% if not forloop.first %} marginless{% endif %}"><div class="col8">
+        <div class="col_container alignleft margincollapsable"><div class="col8">
                 {% include_block block %}
         </div></div>
     {% endif %}

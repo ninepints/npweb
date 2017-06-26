@@ -61,6 +61,11 @@ nav
     margin: -1.75rem auto;
 }
 
+.col_container.margincollapsable + .col_container.margincollapsable
+{
+    margin: -1.75rem auto 0;
+}
+
 .col_container > *
 {
     padding-left: 1rem;
@@ -144,9 +149,9 @@ body
 h1
 {
     font-size: 4rem;
-    line-height: 7rem;
+    line-height: 5.25rem;
     margin: 5.25rem 0 3.5rem;
-    font-family: 'Brando Sans Light', sans-serif;
+    font-family: 'Brando Sans Semi Bold', sans-serif;
     font-weight: normal;
 }
 
@@ -165,7 +170,7 @@ h3
     line-height: 3.5rem;
     margin: 1.75rem 0;
     font-family: 'Brando', sans-serif;
-    font-weight: normal;
+    font-weight: bold;
 }
 
 p
@@ -190,7 +195,7 @@ code
     font-family: "Brando Sans Light";
 }
 
-.lining_numerals
+body
 {
     -moz-font-feature-settings: "lnum";
     -webkit-font-feature-settings: "lnum";
