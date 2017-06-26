@@ -7,7 +7,7 @@
         {% include "blog/content_stream.html" with stream=page.body %}
         {% include "blog/blog_post_meta.html" with post=page %}
     </article>
-    <div class="col_container marginless padded">
+    <div class="col_container alignleft marginless padded">
         {% if page.next_post %}
             <a class="col4 blocklink sans_serif pagination prev" href="{% pageurl page.next_post %}">
                 <p>Next:</p><p>{{ page.next_post.title }}</p>

@@ -27,7 +27,7 @@
 
                 {% block hero_content %}
                     <div class="col_container">
-                        <h1 class="col8">{% firstof hero_title title page.title "ninepints" %}</h1>
+                        <h1 class="col12">{% firstof hero_title title page.title "ninepints" %}</h1>
                     </div>
                 {% endblock %}
 
@@ -41,7 +41,7 @@
             {% endif %}
 
             <nav id="main_nav"{% if page.hero_image %} class="with_image"{% endif %}><div class="col_container">
-                <ul class="col8 bulletless">
+                <ul class="col12 bulletless">
                     <li><a href="{% pageurl request.site.root_page %}" class="blocklink sans_serif">Home</a></li>
                     <li><a href="{% slugurl 'about' %}" class="blocklink sans_serif">About</a></li>
                 </ul>
