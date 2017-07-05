@@ -26,7 +26,9 @@ pagination_regex = r'(?:page/(?P<page_num>[1-9]\d+|[2-9])/)?'
 class ResponseOverrideWrapper(object):
     """
     Wrapper for a page object that will always serve a particular response.
-    This is a workaround for the fact that we can't redirect the user during routing.
+    This is a workaround for our inability to redirect the user during routing.
+    We could raise a Http301 exception if one existed, but right now
+    redirection requires us to return a HttpResponse.
     """
 
     def __init__(self, page, response):
