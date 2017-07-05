@@ -20,7 +20,7 @@ from wagtail.wagtailimages.edit_handlers import ImageChooserPanel
 from .blocks import ContentBlock, ContentMethodsMixin
 
 
-pagination_regex = r'(?:page/(?P<page>[1-9]\d+|[2-9])/)?'
+pagination_regex = r'(?:page/(?P<page_num>[1-9]\d+|[2-9])/)?'
 
 
 class ResponseOverrideWrapper(object):
@@ -65,29 +65,29 @@ class AboutPage(BasePage, ContentMethodsMixin):
 
 
 class BlogIndex(RoutablePageMixin, BasePage):
-    posts_per_page = 3
+    posts_per_pagination_page = 3
 
     @route(r'^' + pagination_regex + '$')
-    def all_posts(self, request, page=None):
-        page = page and int(page)
+    def all_posts(self, request, page_num=None):
+        page_num = page_num and int(page_num)
         return self.paginate(request, posts=self.public_posts,
-                             view_name='all_posts', view_kwargs={'page': page},
+                             view_name='all_posts', view_kwargs={'page_num': page_num},
                              title=self.title, title_root=True)
 
     @route(r'^tag/(?P<tag>[\a-zA-Z0-9_-]+)/' + pagination_regex + r'$')
-    def posts_by_tag(self, request, tag, page=None):
-        page = page and int(page)
+    def posts_by_tag(self, request, tag, page_num=None):
+        page_num = page_num and int(page_num)
         return self.paginate(request, posts=self.public_posts.filter(tags__name=tag),
-                             view_name='posts_by_tag', view_kwargs={'tag': tag, 'page': page},
+                             view_name='posts_by_tag', view_kwargs={'tag': tag, 'page_num': page_num},
                              title='Posts tagged "{}"'.format(tag), hero_title='#{}'.format(tag))
 
     @route(r'^(?P<year>[1-9]\d*)/' + pagination_regex + r'$')
     @route(r'^(?P<year>[1-9]\d*)/(?P<month>1[0-2])/' + pagination_regex + r'$')
     @route(r'^(?P<year>[1-9]\d*)/0(?P<month>[1-9])/' + pagination_regex + r'$')
-    def posts_by_date(self, request, year, month=None, page=None):
+    def posts_by_date(self, request, year, month=None, page_num=None):
         year = int(year)
         month = month and int(month)
-        page = page and int(page)
+        page_num = page_num and int(page_num)
 
         if month is None:
             posts = self.public_posts.filter(pub_date__year=year)
@@ -98,36 +98,36 @@ class BlogIndex(RoutablePageMixin, BasePage):
 
         return self.paginate(request, title=title, posts=posts,
                              view_name='posts_by_date',
-                             view_kwargs={'year': year, 'month': month, 'page': page})
+                             view_kwargs={'year': year, 'month': month, 'page_num': page_num})
 
     def paginate(self, request, posts, view_name, view_kwargs=None, **kwargs):
         post_count = posts.count()
-        max_page = max(math.ceil(post_count / self.posts_per_page), 1)
+        max_page = max(math.ceil(post_count / self.posts_per_pagination_page), 1)
         view_kwargs = {k: v for k, v in view_kwargs.items() if v is not None}
-        page = view_kwargs.get('page', 1)
+        page_num = view_kwargs.get('page_num', 1)
 
-        if page > max_page == 1:
-            del view_kwargs['page']
+        if page_num > max_page == 1:
+            del view_kwargs['page_num']
             return HttpResponseRedirect(self.url + self.reverse_subpage(view_name, kwargs=view_kwargs))
-        elif page > max_page:
-            view_kwargs['page'] = max_page
+        elif page_num > max_page:
+            view_kwargs['page_num'] = max_page
             return HttpResponseRedirect(self.url + self.reverse_subpage(view_name, kwargs=view_kwargs))
 
-        page_start_index = (page - 1) * self.posts_per_page
-        page_end_index = page * self.posts_per_page
+        pagination_start_index = (page_num - 1) * self.posts_per_pagination_page
+        pagination_end_index = page_num * self.posts_per_pagination_page
 
         prev_page_url = next_page_url = None
-        if page == 2:
-            del view_kwargs['page']
+        if page_num == 2:
+            del view_kwargs['page_num']
             prev_page_url = self.url + self.reverse_subpage(view_name, kwargs=view_kwargs)
-        elif page > 2:
-            view_kwargs['page'] = page - 1
+        elif page_num > 2:
+            view_kwargs['page_num'] = page_num - 1
             prev_page_url = self.url + self.reverse_subpage(view_name, kwargs=view_kwargs)
-        if post_count > page_end_index:
-            view_kwargs['page'] = page + 1
+        if post_count > pagination_end_index:
+            view_kwargs['page_num'] = page_num + 1
             next_page_url = self.url + self.reverse_subpage(view_name, kwargs=view_kwargs)
 
-        posts = posts.specific().order_by('-pub_date')[page_start_index:page_end_index]
+        posts = posts.specific().order_by('-pub_date')[pagination_start_index:pagination_end_index]
 
         return Page.serve(self, request, posts=posts,
                           prev_page_url=prev_page_url, next_page_url=next_page_url,
