@@ -140,5 +140,6 @@ WAGTAIL_SITE_NAME = 'npweb'
 
 BUILD_DIR = os.path.join(BASE_DIR, 'build')
 BAKERY_VIEWS = (
-    'wagtailbakery.views.AllPublishedPagesView',
+    'blog.views.IndicesView',
+    'blog.views.OtherPagesView',
 )
