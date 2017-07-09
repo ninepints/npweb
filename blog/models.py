@@ -73,8 +73,7 @@ class BlogIndex(RoutablePageMixin, BasePage):
     def all_posts(self, request, page_num=None):
         page_num = page_num and int(page_num)
         return self.paginate(request, posts=self.public_posts,
-                             view_name='all_posts', view_kwargs={'page_num': page_num},
-                             title=self.title, title_root=True)
+                             view_name='all_posts', view_kwargs={'page_num': page_num}, title=self.title)
 
     @route(r'^tag/(?P<tag>[\a-zA-Z0-9_-]+)/' + pagination_regex + r'$')
     def posts_by_tag(self, request, tag, page_num=None):

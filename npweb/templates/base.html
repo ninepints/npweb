@@ -1,10 +1,10 @@
 {% load static %}
-{% load wagtailuserbar wagtailcore_tags wagtailimages_tags %}
+{% load wagtailcore_tags %}
 
 <!DOCTYPE html>
 <html>
     <head>
-        <title>{% block title %}{% if title_root %}ninepints{% else %}{% firstof title page.seo_title page.title %} - ninepints{% endif %}{% endblock %}</title>
+        <title>{% block title %}{% firstof title page.seo_title page.title %} - ninepints{% endblock %}</title>
 
         <meta name="viewport" content="width=device-width">
 
@@ -14,45 +14,25 @@
         {% block extra_css %}{% endblock %}
     </head>
 
-    <body>
-        {% wagtailuserbar %}
+    <body class="parallax_container">
+        {% block header %}{% endblock %}
 
-        <div class="parallax_container">
-            <header id="hero"{% if page.hero_image %} class="with_image parallax_section"{% endif %}>
-                {% if page.hero_image %}
-                    {% image page.hero_image original as hero_image %}
-                    <div id="hero_image" class="cover_img layer1" style="background-image: url({{ hero_image.url }})"></div>
-                    <div id="hero_gradient" class="layer0">
-                {% endif %}
+        {% block parallax_section_start %}<div class="parallax_section">{% endblock %}
 
-                {% block hero_content %}
-                    <div class="col_container">
-                        <h1 class="col12">{% firstof hero_title title page.title "ninepints" %}</h1>
-                    </div>
-                {% endblock %}
-
-                {% if page.hero_image %}
-                    </div>
-                {% endif %}
-            </header>
-
-            {% if page.hero_image %}
-                <div class="parallax_section">
-            {% endif %}
-
-            <nav id="main_nav"{% if page.hero_image %} class="with_image"{% endif %}><div class="col_container">
+        {% block nav %}
+            <nav id="main_nav" class="{% block nav_class %}{% endblock %}"><div class="col_container">
                 <ul class="col12 bulletless">
-                    <li><a href="{% pageurl request.site.root_page %}" class="blocklink sans_serif">Home</a></li>
-                    <li><a href="{% slugurl 'about' %}" class="blocklink sans_serif">About</a></li>
+                    {% block nav_content %}
+                        <li><a href="{% pageurl request.site.root_page %}" class="blocklink sans_serif">Home</a></li>
+                        <li><a href="{% slugurl 'about' %}" class="blocklink sans_serif">About</a></li>
+                    {% endblock %}
                 </ul>
             </div></nav>
+        {% endblock %}
 
-            {% block content %}{% endblock %}
+        {% block content %}{% endblock %}
 
-            {% if page.hero_image %}
-                </div>
-            {% endif %}
-        </div>
+        {% block parallax_section_end %}</div>{% endblock %}
 
         {% block extra_js %}{% endblock %}
     </body>
