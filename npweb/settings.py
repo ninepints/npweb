@@ -9,7 +9,10 @@ SECRET_KEY = 'zd69!lu0(eku6dm1uf!d0q9fy6$tv31my6)g@qov)5syg#5&f8'
 
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    'localhost',
+    'testserver',
+]
 
 
 # Application definition
@@ -140,6 +143,8 @@ WAGTAIL_SITE_NAME = 'npweb'
 
 BUILD_DIR = os.path.join(BASE_DIR, 'build')
 BAKERY_VIEWS = (
-    'blog.views.IndicesView',
+    'npweb.views.Middleware404View',
+    'blog.views.BlogIndexView',
     'blog.views.OtherPagesView',
+    'blog.models.BlogPostFeed',
 )
