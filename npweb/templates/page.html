@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% load static %}
+{% load wagtailuserbar wagtailimages_tags %}
+
+{% block title %}{{ title }} - ninepints{% endblock %}
+
+{% block header %}
+    <header class="parallax_section"{% if page.hero_image %} id="hero"{% endif %}>
+        {% if page.hero_image %}
+            {% image page.hero_image original as hero_image %}
+            <div id="hero_image" class="cover_img layer1" style="background-image: url({{ hero_image.url }})"></div>
+            <div id="hero_gradient" class="layer0">
+        {% endif %}
+
+        {% block header_content %}
+            <div class="col_container">
+                <h1 class="col12">{% firstof hero_title title page.title %}</h1>
+            </div>
+        {% endblock %}
+
+        {% if page.hero_image %}
+            </div>
+        {% endif %}
+    </header>
+{% endblock %}
+
+{% block nav_class %}{% if page.hero_image %}with_hero{% endif %}{% endblock %}
+
+{% block extra_js %}{% wagtailuserbar %}{% endblock %}
