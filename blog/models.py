@@ -3,6 +3,7 @@ import math
 import re
 
 from django.db import models
+from django.db.models import Q
 from django.http import Http404, HttpResponseRedirect, HttpResponsePermanentRedirect
 
 from modelcluster.fields import ParentalKey
@@ -128,7 +129,7 @@ class BlogIndex(RoutablePageMixin, BasePage):
             view_kwargs['page_num'] = page_num + 1
             next_page_url = self.url + self.reverse_subpage(view_name, kwargs=view_kwargs)
 
-        posts = posts.specific().order_by('-pub_date')[pagination_start_index:pagination_end_index]
+        posts = posts.specific().order_by('-pub_date', '-id')[pagination_start_index:pagination_end_index]
 
         return Page.serve(self, request, posts=posts,
                           prev_page_url=prev_page_url, next_page_url=next_page_url,
@@ -239,18 +240,16 @@ class BlogPost(BasePage, ContentMethodsMixin):
 
     @property
     def prev_post(self):
+        q = Q(pub_date__lt=self.pub_date) | (Q(pub_date__lte=self.pub_date) & Q(id__lt=self.id))
         return (self.get_parent().specific.public_posts
-                .not_page(self)
-                .specific()
-                .filter(pub_date__lte=self.pub_date)
-                .order_by('-pub_date')
-                .first())
+                .filter(q)
+                .order_by('-pub_date', '-id')
+                .specific().first())
 
     @property
     def next_post(self):
+        q = Q(pub_date__gt=self.pub_date) | (Q(pub_date__gte=self.pub_date) & Q(id__gt=self.id))
         return (self.get_parent().specific.public_posts
-                .not_page(self)
-                .specific()
-                .filter(pub_date__gte=self.pub_date)
-                .order_by('pub_date')
-                .first())
+                .filter(q)
+                .order_by('pub_date', 'id')
+                .specific().first())
