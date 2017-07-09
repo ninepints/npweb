@@ -191,10 +191,21 @@ p
 pre,
 code
 {
-    font-size: 0.75rem;
-    line-height: 0.875rem;
+    font-size: 1rem;
+    line-height: 1.5rem;
     font-family: 'Menlo', monospace;
     font-weight: normal;
+    background-color: hsl(280, 6%, 95%);
+    padding: 0.25rem;
+}
+
+.pre_container pre,
+.pre_container code
+{
+    font-size: 0.75rem;
+    line-height: 0.875rem;
+    background-color: transparent;
+    padding: 0;
 }
 
 .sans_serif
