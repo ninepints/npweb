@@ -19,14 +19,14 @@ class BlogIndexView(WagtailBakeryView):
     def build_object(self, obj):
         # Build tag view
         tag_counts = ((tag, tag.post_count) for tag in BlogPostTag.tag_model().objects
-            .filter(blogpost__in=obj.public_posts)
+            .filter(blogpost__in=obj.public_posts())
             .annotate(post_count=Count('blogpost')))
         self.paginate_subpage(obj, tag_counts, 'posts_by_tag', lambda tag: {'tag': tag.slug})
 
         # Build date view
         # It's possible to get a post count by publication year/month via the ORM, but this
         # is much more straightforward. For the record, I did get the ORM version working.
-        pub_dates = obj.public_posts.values_list(ExtractYear('pub_date'), ExtractMonth('pub_date'))
+        pub_dates = obj.public_posts().values_list(ExtractYear('pub_date'), ExtractMonth('pub_date'))
         month_counter = Counter(pub_dates)
         year_counter = Counter(ym[0] for ym in pub_dates)
         self.paginate_subpage(obj, month_counter.items(), 'posts_by_date', lambda ym: {'year': ym[0], 'month': ym[1]})
