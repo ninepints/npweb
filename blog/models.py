@@ -1,10 +1,15 @@
 import datetime
 import math
+import os
 import re
 
+from bakery.feeds import BuildableFeed
+from django.conf import settings
 from django.db import models
 from django.db.models import Q
 from django.http import Http404, HttpResponseRedirect, HttpResponsePermanentRedirect
+from django.test import RequestFactory
+from django.utils.feedgenerator import Atom1Feed
 
 from modelcluster.fields import ParentalKey
 from modelcluster.contrib.taggit import ClusterTaggableManager
@@ -43,6 +48,69 @@ class ResponseOverrideWrapper(object):
         return getattr(self.page, item)
 
 
+class BlogPostFeed(BuildableFeed):
+    feed_type = Atom1Feed
+
+    # Shenanigans to get BuildableFeed to support multiple feed subjects
+
+    def bakery_queryset(self):
+        return BlogIndex.objects.all().public()
+
+    def build_path(self, obj):
+        return obj.reverse_subpage('feed') + 'atom.xml'
+
+    def create_request(self, url, obj):
+        hostname = obj.get_site().hostname
+        return RequestFactory(SERVER_NAME=hostname).get(url)
+
+    def get_content(self, obj):
+        return self(self.request, bakery_object=obj).content
+
+    def build_queryset(self):
+        for obj in self.bakery_queryset():
+            build_path = self.build_path(obj)
+            # Passing build_path as the URL because that's what bakery does
+            self.request = self.create_request(build_path, obj)
+            self.prep_directory(build_path)
+            path = os.path.join(settings.BUILD_DIR, build_path)
+            self.build_file(path, self.get_content(obj))
+
+    # The standard Feed methods
+
+    def get_object(self, request, bakery_object=None, *args, **kwargs):
+        return bakery_object or kwargs['blog_index']
+
+    def title(self, obj):
+        return obj.title
+
+    subtitle = ''
+
+    def link(self, obj):
+        return obj.url
+
+    def items(self, obj):
+        return obj.public_posts.order_by('-pub_date', '-id').specific()[:10]
+
+    def item_title(self, item):
+        return item.title
+
+    description_template = 'blog/content_stream.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['stream'] = kwargs['item'].body
+        return context
+
+    def item_link(self, item):
+        return item.url
+
+    def item_pubdate(self, item):
+        return item.pub_date
+
+    def item_updateddate(self, item):
+        return max(self.item_pubdate(item), item.last_published_at)
+
+
 class BasePage(Page):
     is_creatable = False
 
@@ -69,6 +137,7 @@ class AboutPage(BasePage, ContentMethodsMixin):
 
 class BlogIndex(RoutablePageMixin, BasePage):
     posts_per_pagination_page = 3
+    feed_view = BlogPostFeed()
 
     @route(r'^' + pagination_regex + '$')
     def all_posts(self, request, page_num=None):
@@ -101,6 +170,10 @@ class BlogIndex(RoutablePageMixin, BasePage):
         return self.paginate(request, title=title, posts=posts,
                              view_name='posts_by_date',
                              view_kwargs={'year': year, 'month': month, 'page_num': page_num})
+
+    @route(r'^feed/$')
+    def feed(self, request):
+        return self.feed_view(request, blog_index=self)
 
     def paginate(self, request, posts, view_name, view_kwargs=None, **kwargs):
         post_count = posts.count()

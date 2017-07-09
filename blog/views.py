@@ -12,7 +12,7 @@ from wagtailbakery.views import WagtailBakeryView
 from .models import BlogIndex, BlogPostTag
 
 
-class IndicesView(WagtailBakeryView):
+class BlogIndexView(WagtailBakeryView):
     def get_queryset(self):
         return BlogIndex.objects.all().public()
 
