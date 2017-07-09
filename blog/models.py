@@ -89,7 +89,7 @@ class BlogPostFeed(BuildableFeed):
         return obj.url
 
     def items(self, obj):
-        return obj.public_posts.order_by('-pub_date', '-id').specific()[:10]
+        return obj.public_posts().order_by('-pub_date', '-id').specific()[:10]
 
     def item_title(self, item):
         return item.title
@@ -142,13 +142,13 @@ class BlogIndex(RoutablePageMixin, BasePage):
     @route(r'^' + pagination_regex + '$')
     def all_posts(self, request, page_num=None):
         page_num = page_num and int(page_num)
-        return self.paginate(request, posts=self.public_posts,
+        return self.paginate(request, posts=self.public_posts(),
                              view_name='all_posts', view_kwargs={'page_num': page_num}, title=self.title)
 
     @route(r'^tag/(?P<tag>[\a-zA-Z0-9_-]+)/' + pagination_regex + r'$')
     def posts_by_tag(self, request, tag, page_num=None):
         page_num = page_num and int(page_num)
-        return self.paginate(request, posts=self.public_posts.filter(tags__name=tag),
+        return self.paginate(request, posts=self.public_posts().filter(tags__name=tag),
                              view_name='posts_by_tag', view_kwargs={'tag': tag, 'page_num': page_num},
                              title='Posts tagged "{}"'.format(tag), hero_title='#{}'.format(tag))
 
@@ -161,10 +161,10 @@ class BlogIndex(RoutablePageMixin, BasePage):
         page_num = page_num and int(page_num)
 
         if month is None:
-            posts = self.public_posts.filter(pub_date__year=year)
+            posts = self.public_posts().filter(pub_date__year=year)
             title = year
         else:
-            posts = self.public_posts.filter(pub_date__year=year, pub_date__month=month)
+            posts = self.public_posts().filter(pub_date__year=year, pub_date__month=month)
             title = datetime.date(year, month, 1).strftime('%B %Y')
 
         return self.paginate(request, title=title, posts=posts,
@@ -220,13 +220,11 @@ class BlogIndex(RoutablePageMixin, BasePage):
 
         return context
 
-    @property
     def posts(self):
         return BlogPost.objects.child_of(self)
 
-    @property
     def public_posts(self):
-        return self.posts.live().public()
+        return self.posts().live().public()
 
     def route(self, request, path_components):
         """
@@ -244,7 +242,7 @@ class BlogIndex(RoutablePageMixin, BasePage):
 
             if re.match(r'^\d+$', year) and re.match(r'^\d{2}$', month):
                 try:
-                    post = self.posts.get(slug=child_slug).specific
+                    post = self.posts().get(slug=child_slug).specific
                 except Page.DoesNotExist:
                     pass
                 else:
@@ -269,7 +267,7 @@ class BlogIndex(RoutablePageMixin, BasePage):
             child_slug = path_components[0]
 
             try:
-                self.posts.get(slug=child_slug)
+                self.posts().get(slug=child_slug)
             except Page.DoesNotExist:
                 pass
             else:
@@ -311,18 +309,16 @@ class BlogPost(BasePage, ContentMethodsMixin):
 
         return self.url_path
 
-    @property
     def prev_post(self):
         q = Q(pub_date__lt=self.pub_date) | (Q(pub_date__lte=self.pub_date) & Q(id__lt=self.id))
-        return (self.get_parent().specific.public_posts
+        return (self.get_parent().specific.public_posts()
                 .filter(q)
                 .order_by('-pub_date', '-id')
                 .specific().first())
 
-    @property
     def next_post(self):
         q = Q(pub_date__gt=self.pub_date) | (Q(pub_date__gte=self.pub_date) & Q(id__gt=self.id))
-        return (self.get_parent().specific.public_posts
+        return (self.get_parent().specific.public_posts()
                 .filter(q)
                 .order_by('pub_date', 'id')
                 .specific().first())
