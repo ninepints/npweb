@@ -5,9 +5,9 @@ PROJECT_DIR = os.path.dirname(os.path.abspath(__file__))
 BASE_DIR = os.path.dirname(PROJECT_DIR)
 
 
-SECRET_KEY = 'zd69!lu0(eku6dm1uf!d0q9fy6$tv31my6)g@qov)5syg#5&f8'
+SECRET_KEY = os.environ['DJANGO_SECRET']
 
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = [
     'localhost',
