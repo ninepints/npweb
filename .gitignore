@@ -2,5 +2,11 @@
 .DS_Store
 
 .idea
+
+npweb/static/fonts/
+
 db.sqlite3
 media
+
+static
+build
