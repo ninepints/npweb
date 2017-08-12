@@ -444,11 +444,6 @@ a.pagination
 
 /* Colored sections */
 
-.section_lightgray
-{
-    background-color: hsl(280, 6%, 97%);
-}
-
 .section_lightgray > .col_container > *
 {
     background-color: hsl(280, 6%, 95%);
