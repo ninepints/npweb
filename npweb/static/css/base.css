@@ -460,6 +460,14 @@ a.pagination
     }
 }
 
+@media (max-width: 359px)
+{
+    html
+    {
+        font-size: 0.85rem;
+    }
+}
+
 @supports ((perspective: 160px) and (not (-webkit-overflow-scrolling: touch)))
 {
     .parallax_container
