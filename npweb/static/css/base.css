@@ -142,14 +142,9 @@ body
     font-size: 1.25rem;
     line-height: 1.75rem;
     color: hsl(280, 8%, 23%);
-    font-family: 'Brando', sans-serif;
+    font-family: 'Brando', serif;
     font-weight: normal;
 
-    -moz-font-feature-settings: "lnum";
-    -webkit-font-feature-settings: "lnum";
-    font-feature-settings: "lnum";
-    -moz-font-variant-numeric: lining-nums;
-    -webkit-font-variant-numeric: lining-nums;
     font-variant-numeric: lining-nums;
 }
 
@@ -167,7 +162,7 @@ h2
     font-size: 2rem;
     line-height: 3.5rem;
     margin: 3.5rem 0 1.75rem;
-    font-family: 'Brando', sans-serif;
+    font-family: 'Brando', serif;
     font-weight: normal;
 }
 
@@ -176,7 +171,7 @@ h3
     font-size: 1.5rem;
     line-height: 3.5rem;
     margin: 1.75rem 0;
-    font-family: 'Brando', sans-serif;
+    font-family: 'Brando', serif;
     font-weight: bold;
 }
 
@@ -210,7 +205,7 @@ code
 
 .sans_serif
 {
-    font-family: "Brando Sans Light";
+    font-family: 'Brando Sans Light', sans-serif;
 }
 
 
@@ -429,7 +424,7 @@ a.pagination
 
 .pagination.prev > p:first-child::before
 {
-    content: "‹ ";
+    content: '‹ ';
     display: block;
     position: absolute;
     left: 1.5rem;
@@ -439,7 +434,7 @@ a.pagination
 
 .pagination.next > p:last-child::after
 {
-    content: " ›";
+    content: ' ›';
     display: block;
     position: absolute;
     right: 1.5rem;
