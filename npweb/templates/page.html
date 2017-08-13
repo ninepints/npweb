@@ -3,7 +3,7 @@
 {% load static %}
 {% load wagtailuserbar wagtailimages_tags %}
 
-{% block title %}{{ title }} - ninepints{% endblock %}
+{% block title %}{% firstof title page.seo_title page.title %} - ninepints{% endblock %}
 
 {% block header %}
     <header class="parallax_section"{% if page.hero_image %} id="hero"{% endif %}>
