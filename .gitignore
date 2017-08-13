@@ -3,10 +3,11 @@
 
 .idea
 
-npweb/static/fonts/
+/npweb/static/fonts/
+/npweb/static/lib/
 
-db.sqlite3
-media
+/db.sqlite3
+/media/
 
-static
-build
+/static/
+/build/

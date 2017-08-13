@@ -1,0 +1,41 @@
+@font-face
+{
+    font-family: 'Brando';
+    src: url('../fonts/brando-regular-v10.woff') format('woff');
+    font-style: normal;
+    font-weight: normal;
+}
+
+@font-face
+{
+    font-family: 'Brando';
+    src: url('../fonts/brando-bold-v10.woff') format('woff');
+    font-style: normal;
+    font-weight: bold;
+}
+
+@font-face
+{
+    font-family: 'Brando';
+    src: url('../fonts/brando-regularitalic-v10.woff') format('woff');
+    font-style: italic;
+    font-weight: normal;
+}
+
+@font-face
+{
+    font-family: 'Brando Sans Light';
+    src: url('../fonts/brandosans-light-v100.woff') format('woff'),
+         url('../fonts/brandosans-light-v100.woff2') format('woff2');
+    font-style: normal;
+    font-weight: normal;
+}
+
+@font-face
+{
+    font-family: 'Brando Sans Semi Bold';
+    src: url('../fonts/brandosans-semibold-v100.woff') format('woff'),
+         url('../fonts/brandosans-semibold-v100.woff2') format('woff2');
+    font-style: normal;
+    font-weight: normal;
+}
