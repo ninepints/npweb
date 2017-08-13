@@ -45,7 +45,7 @@ class BlogIndexView(WagtailBakeryView):
 
     def build_subpage(self, page, view_name, view_kwargs):
         hostname = page.get_site().hostname
-        url = os.path.join(page.url, page.reverse_subpage(view_name, kwargs=view_kwargs))
+        url = page.url + page.reverse_subpage(view_name, kwargs=view_kwargs)
 
         self.request = RequestFactory(SERVER_NAME=hostname).get(url)
         content = self.get_content(page)

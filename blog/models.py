@@ -57,7 +57,7 @@ class BlogPostFeed(BuildableFeed):
         return BlogIndex.objects.all().public()
 
     def build_path(self, obj):
-        return obj.reverse_subpage('feed') + 'atom.xml'
+        return os.path.join(obj.url[1:], obj.reverse_subpage('feed'), 'atom.xml')
 
     def create_request(self, url, obj):
         hostname = obj.get_site().hostname
@@ -69,8 +69,10 @@ class BlogPostFeed(BuildableFeed):
     def build_queryset(self):
         for obj in self.bakery_queryset():
             build_path = self.build_path(obj)
-            # Passing build_path as the URL because that's what bakery does
-            self.request = self.create_request(build_path, obj)
+            # Bakery passes build_path as the URL, but that results in the feed
+            # containing an incorrect URL for itself. Pass the real URL instead
+            url = obj.url + obj.reverse_subpage('feed')
+            self.request = self.create_request(url, obj)
             self.prep_directory(build_path)
             path = os.path.join(settings.BUILD_DIR, build_path)
             self.build_file(path, self.get_content(obj))
