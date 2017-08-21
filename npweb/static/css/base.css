@@ -155,6 +155,7 @@ h1
     margin: 5.25rem 0 3.5rem;
     font-family: 'Brando Sans Semi Bold', sans-serif;
     font-weight: normal;
+    overflow: hidden;  /* Don't break mobile layout with long words */
 }
 
 h2
