@@ -56,27 +56,25 @@ class ContentMethodsMixin(object):
     def content_field(self):
         return getattr(self, self.content_field_name)
 
-    @property
     def first_text_block(self):
         try:
-            return next(block for block in self.content_field if isinstance(block.block, RichTextBlock))
+            return next(self.all_text_blocks())
         except StopIteration:
             return None
 
-    @property
+    def all_text_blocks(self):
+        return (block for block in self.content_field if isinstance(block.block, RichTextBlock))
+
+    def first_text_block_is_all_there_is(self):
+        return (len(self.content_field) - int(self.first_text_block() is not None)) == 0
+
     def contains_math(self):
         return any(self.block_contains_math(block) for block in self.content_field)
-
-    @property
-    def first_text_block_contains_math(self):
-        first_text_block = self.first_text_block
-        return first_text_block is not None and self.block_contains_math(first_text_block)
 
     @staticmethod
     def block_contains_math(block):
         return (isinstance(block.block, RichTextBlock) and
                 re.search(r'(?:\\\[.*\\\])|(?:\\\(.*\\\))', block.value.source))
 
-    @property
     def contains_code(self):
         return any(isinstance(block.block, CodeBlock) for block in self.content_field)
