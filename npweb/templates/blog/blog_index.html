@@ -20,11 +20,16 @@
                 {% include "blog/blog_post_meta.html" %}
             {% else %}
                 <div class="col_container alignleft marginless"><div class="col8">
-                    {% with post.first_text_block as first_block %}
-                        {% if first_block %}
-                            {% include_block first_block %}
+                    {% with first_block=post.first_text_block no_more_blocks=post.first_text_block_is_all_there_is %}
+                        {% if not first_block and no_more_blocks %}
+                            <p class="faded sans_serif marginless">No content</p>
                         {% else %}
-                            <p class="faded sans_serif marginless">No text content</p>
+                            {% if first_block %}
+                                {% include_block first_block %}
+                            {% endif %}
+                            {% if not no_more_blocks %}
+                                <p class="sans_serif"><a href="{% pageurl post %}">Read more ›</a></p>
+                            {% endif %}
                         {% endif %}
                     {% endwith %}
                 </div></div>

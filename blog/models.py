@@ -1,4 +1,5 @@
 import datetime
+import itertools
 import math
 import os
 import re
@@ -214,9 +215,14 @@ class BlogIndex(RoutablePageMixin, BasePage):
         context = super().get_context(request, *args, **kwargs)
 
         posts = kwargs['posts']
+
         full_posts = context.get('full_posts', False)
-        context['includes_math'] = any(post.contains_math if full_posts else post.first_text_block_contains_math
-                                       for post in posts)
+        def limit(blocks):
+            return blocks if full_posts else itertools.islice(blocks, 1)
+
+        context['includes_math'] = any(post.block_contains_math(block)
+                                       for post in posts
+                                       for block in limit(post.all_text_blocks()))
 
         context.update(kwargs)
 
