@@ -1,4 +1,4 @@
 Django>=1.11,<1.12
 Pygments>=2.2,<2.3
-wagtail>=1.11,<1.12
+wagtail>=1.12,<1.13
 wagtail-bakery>=0.1,<0.2
