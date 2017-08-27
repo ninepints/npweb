@@ -213,29 +213,34 @@ code
 
 /* Miscellanous element styles */
 
-a:any-link
+a:link,
+a:visited
 {
     color: hsl(215, 100%, 61%);
     text-decoration: none;
 }
 
-a:any-link:hover
+a:link:hover,
+a:visited:hover
 {
     text-decoration: underline;
 }
 
-a:any-link:active
+a:link:active,
+a:visited:active
 {
     color: hsl(215, 100%, 55%);
 }
 
-a.blocklink:any-link:hover
+a.blocklink:link:hover,
+a.blocklink:visited:hover
 {
     background-color: hsl(280, 6%, 97%);
     text-decoration: none;
 }
 
-a.blocklink:any-link:active
+a.blocklink:link:active,
+a.blocklink:visited:active
 {
     background-color: hsl(280, 6%, 95%);
 }
@@ -261,13 +266,16 @@ ol.bulletless:not(.col_container > *)
 }
 
 .faded,
-.faded a:any-link
+.faded a:link,
+.faded a:visited
 {
     color: hsl(247, 5%, 66%);
 }
 
-.faded a:any-link:active,
-a.faded:any-link:active
+.faded a:link:active,
+.faded a:visited:active,
+a.faded:link:active,
+a.faded:visited:active
 {
     color: hsl(247, 5%, 60%);
 }
@@ -372,7 +380,8 @@ header h1
     padding: 0.875rem 1rem;
 }
 
-#main_nav a:any-link:hover
+#main_nav a:link:hover,
+#main_nav a:visited:hover
 {
     text-decoration: none;
 }
@@ -387,12 +396,14 @@ header h1
     color: white;
 }
 
-#main_nav.with_hero a:any-link:hover
+#main_nav.with_hero a:link:hover,
+#main_nav.with_hero a:visited:hover
 {
     background-color: hsl(280, 6%, 32%);
 }
 
-#main_nav.with_hero a:any-link:active
+#main_nav.with_hero a:link:active,
+#main_nav.with_hero a:visited:active
 {
     color: hsl(0, 0%, 88%);
     background-color: hsl(280, 6%, 30%);
