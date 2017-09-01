@@ -16,7 +16,7 @@
         {% block extra_css %}{% endblock %}
     </head>
 
-    <body class="parallax_container">
+    <body><div class="parallax_container">
         {% block header %}{% endblock %}
 
         {% block parallax_section_start %}<div class="parallax_section">{% endblock %}
@@ -45,5 +45,5 @@
                 ga('send', 'pageview');
             </script>
         {% endif %}{% endblock %}
-    </body>
+    </div></body>
 </html>
