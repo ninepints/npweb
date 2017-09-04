@@ -6,7 +6,6 @@ from pygments.lexers import get_all_lexers, get_lexer_by_name
 
 from wagtail.wagtailcore.blocks import ChoiceBlock, RichTextBlock, StructBlock, TextBlock
 from wagtail.wagtailcore.blocks.stream_block import StreamBlock
-from wagtail.wagtailcore.rich_text import RichText
 from wagtail.wagtaildocs.blocks import DocumentChooserBlock
 from wagtail.wagtailembeds.blocks import EmbedBlock
 from wagtail.wagtailimages.blocks import ImageChooserBlock
@@ -32,13 +31,31 @@ class CodeBlock(StructBlock):
         template = 'blog/blocks/code.html'
 
 
-# We could mess with the editor to get it to support inline code, but this is a lot easier
-class RichTextWithCodeBlock(RichTextBlock):
+#
+class CleanedRichTextBlock(RichTextBlock):
+    """
+    Rich text block that cleans up some artifacts the rich text editor
+    tends to leave behind (empty paragraphs and non-breaking spaces).
+    """
+    def value_from_form(self, value):
+        value = value.replace('\xa0', ' ')
+        value = re.sub(r'<p>\s*</p>', r'', value)
+        return super().value_from_form(value)
+
+
+class RichTextWithCodeBlock(CleanedRichTextBlock):
+    """
+    Rich text block that translates square-bracket code tags into the HTML
+    equivalent for display purposes. We could mess with the editor to get it
+    to support inline code, but this is a lot easier.
+    """
     def value_for_form(self, value):
-        return re.sub(r'<(/?)code>', r'[\1code]', value.source)
+        value = super().value_for_form(value)
+        return re.sub(r'<(/?)code>', r'[\1code]', value)
 
     def value_from_form(self, value):
-        return RichText(re.sub(r'\[(/?)code\]', r'<\1code>', value))
+        value = re.sub(r'\[(/?)code\]', r'<\1code>', value)
+        return super().value_from_form(value)
 
 
 class ContentBlock(StreamBlock):
