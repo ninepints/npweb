@@ -14,8 +14,6 @@ ALLOWED_HOSTS = [
     'testserver',
 ]
 
-ENABLE_ANALYTICS = True
-
 
 # Application definition
 
@@ -151,3 +149,8 @@ BAKERY_VIEWS = (
     'blog.views.OtherPagesView',
     'blog.models.BlogPostFeed',
 )
+
+
+# Project-specific settings
+
+GOOGLE_ANALYTICS_ID = os.environ.get('GOOGLE_ANALYTICS_ID')
