@@ -2,4 +2,4 @@ from django.conf import settings
 
 
 def analytics(request):
-    return {'enable_analytics': settings.ENABLE_ANALYTICS}
+    return {'google_analytics_id': settings.GOOGLE_ANALYTICS_ID}
