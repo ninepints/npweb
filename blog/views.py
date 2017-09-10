@@ -14,7 +14,7 @@ from .models import BlogIndex, BlogPostTag
 
 class BlogIndexView(WagtailBakeryView):
     def get_queryset(self):
-        return BlogIndex.objects.all().public()
+        return BlogIndex.objects.all().live().public()
 
     def build_object(self, obj):
         # Build tag view
@@ -60,4 +60,4 @@ class BlogIndexView(WagtailBakeryView):
 
 class OtherPagesView(WagtailBakeryView):
     def get_queryset(self):
-        return Page.objects.all().public().not_type(BlogIndex)
+        return Page.objects.all().live().public().not_type(BlogIndex)
