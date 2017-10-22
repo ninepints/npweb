@@ -318,14 +318,20 @@ class BlogPost(BasePage, ContentMethodsMixin):
         return self.url_path
 
     def prev_post(self):
-        q = Q(pub_date__lt=self.pub_date) | (Q(pub_date__lte=self.pub_date) & Q(id__lt=self.id))
+        q = Q(pub_date__lt=self.pub_date)
+        if self.id:
+            q |= Q(pub_date__lte=self.pub_date) & Q(id__lt=self.id)
+
         return (self.get_parent().specific.public_posts()
                 .filter(q)
                 .order_by('-pub_date', '-id')
                 .specific().first())
 
     def next_post(self):
-        q = Q(pub_date__gt=self.pub_date) | (Q(pub_date__gte=self.pub_date) & Q(id__gt=self.id))
+        q = Q(pub_date__gt=self.pub_date)
+        if self.id:
+            q |= Q(pub_date__gte=self.pub_date) & Q(id__gt=self.id)
+
         return (self.get_parent().specific.public_posts()
                 .filter(q)
                 .order_by('pub_date', 'id')
