@@ -196,6 +196,11 @@ code
     white-space: pre;
 }
 
+.pre_container pre
+{
+    display: inline-block;
+}
+
 .pre_container pre,
 .pre_container code
 {
