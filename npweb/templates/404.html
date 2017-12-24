@@ -1,17 +1,22 @@
 {% extends 'base.html' %}
 
-{% block title %}Not Found - ninepints{% endblock %}
+{% load wagtailcore_tags %}
+
+{% block title %}404 - ninepints{% endblock %}
+
+{% block nav %}{% endblock %}
 
 {% block header %}
     <header class="parallax_section">
         <div class="col_container">
-            <h1 class="col12">Not Found</h1>
+            <h1 class="col12">404</h1>
         </div>
     </header>
 {% endblock %}
 
 {% block content %}
-    <div class="col_container">
-        <p class="col12 sans_serif">The requested page does not exist.</p>
-    </div>
+    <div class="col_container"><div class="col12">
+        <p class="sans_serif">The requested page was not found.</p>
+        <p class="sans_serif"><a href="{% pageurl request.site.root_page %}">Back to home?</a></p>
+    </div></div>
 {% endblock %}
