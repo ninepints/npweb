@@ -31,7 +31,6 @@ class CodeBlock(StructBlock):
         template = 'blog/blocks/code.html'
 
 
-#
 class CleanedRichTextBlock(RichTextBlock):
     """
     Rich text block that cleans up some artifacts the rich text editor
