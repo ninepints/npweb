@@ -196,18 +196,18 @@ code
     white-space: pre;
 }
 
-.pre_container pre
-{
-    display: inline-block;
-}
-
-.pre_container pre,
-.pre_container code
+pre,
+pre > code
 {
     font-size: 0.75rem;
     line-height: 0.875rem;
     background-color: transparent;
     padding: 0;
+}
+
+.x_scrollable pre
+{
+    display: inline-block;
 }
 
 .sans_serif
@@ -290,7 +290,7 @@ pre
     margin: 1.75rem 0;
 }
 
-.pre_container
+.x_scrollable
 {
     overflow-x: auto;
 }

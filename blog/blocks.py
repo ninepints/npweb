@@ -31,6 +31,15 @@ class CodeBlock(StructBlock):
         template = 'blog/blocks/code.html'
 
 
+class MathBlock(TextBlock):
+    """
+    For non-inline math, which may have special layout considerations.
+    """
+    class Meta:
+        icon = 'plus'
+        template = 'blog/blocks/math.html'
+
+
 class CleanedRichTextBlock(RichTextBlock):
     """
     Rich text block that cleans up some artifacts the rich text editor
@@ -63,6 +72,7 @@ class ContentBlock(StreamBlock):
     embed = EmbedBlock()
     document = DocumentChooserBlock()
     code = CodeBlock()
+    math = MathBlock()
 
 
 class ContentMethodsMixin(object):
