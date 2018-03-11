@@ -2,9 +2,13 @@
 
 {% for block in stream %}
     {% if block.block_type == 'code' %}
-        <div class="section_lightgray"><div class="col_container alignleft"><div class="col8 pre_container">
+        <div class="section_lightgray"><div class="col_container alignleft"><div class="col8 x_scrollable">
             {% include_block block %}
         </div></div></div>
+    {% elif block.block_type == 'math' %}
+        <div class="col_container alignleft margincollapsable"><div class="col8 x_scrollable">
+            {% include_block block %}
+        </div></div>
     {% else %}
         <div class="col_container alignleft margincollapsable"><div class="col8">
                 {% include_block block %}
