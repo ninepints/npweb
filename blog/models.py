@@ -54,34 +54,36 @@ class BlogPostFeed(BuildableFeed):
 
     # Shenanigans to get BuildableFeed to support multiple feed subjects
 
-    def bakery_queryset(self):
+    def get_queryset(self):
         return BlogIndex.objects.all().public()
 
     def build_path(self, obj):
-        return os.path.join(obj.url[1:], obj.reverse_subpage('feed'), 'atom.xml')
+        return os.path.join(self.feed_url(obj)[1:], 'atom.xml')
 
     def create_request(self, url, obj):
         hostname = obj.get_site().hostname
         return RequestFactory(SERVER_NAME=hostname).get(url)
 
     def get_content(self, obj):
-        return self(self.request, bakery_object=obj).content
+        return self(self.request, blog_index=obj).content
 
     def build_queryset(self):
-        for obj in self.bakery_queryset():
+        for obj in self.get_queryset():
             build_path = self.build_path(obj)
+
             # Bakery passes build_path as the URL, but that results in the feed
             # containing an incorrect URL for itself. Pass the real URL instead
-            url = obj.url + obj.reverse_subpage('feed')
+            url = self.feed_url(obj)
             self.request = self.create_request(url, obj)
+
             self.prep_directory(build_path)
             path = os.path.join(settings.BUILD_DIR, build_path)
             self.build_file(path, self.get_content(obj))
 
     # The standard Feed methods
 
-    def get_object(self, request, bakery_object=None, *args, **kwargs):
-        return bakery_object or kwargs['blog_index']
+    def get_object(self, request, blog_index):
+        return blog_index
 
     def title(self, obj):
         return obj.title
@@ -90,6 +92,9 @@ class BlogPostFeed(BuildableFeed):
 
     def link(self, obj):
         return obj.url
+
+    def feed_url(self, obj):
+        return obj.url + obj.reverse_subpage('feed')
 
     def items(self, obj):
         return obj.public_posts().order_by('-pub_date', '-id').specific()[:10]
