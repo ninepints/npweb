@@ -42,14 +42,14 @@
 
     <div class="col_container alignleft marginless padded">
         {% if prev_page_url %}
-            <a class="col4 blocklink sans_serif pagination prev" href="{{ prev_page_url }}">
+            <a class="col4 blocklink sans_serif pagination prev" href="{{ prev_page_url }}" rel="prev">
                 <p>Newer posts</p>
             </a>
         {% else %}
             <div class="col4"></div>
         {% endif %}
         {% if next_page_url %}
-            <a class="col4 blocklink sans_serif pagination next" href="{{ next_page_url }}">
+            <a class="col4 blocklink sans_serif pagination next" href="{{ next_page_url }}" rel="next">
                 <p>Older posts</p>
             </a>
         {% else %}
