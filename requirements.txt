@@ -1,4 +1,4 @@
-Django>=1.11,<1.12
+Django>=2.0,<2.1
 Pygments>=2.2,<2.3
-wagtail>=1.13,<1.14
-wagtail-bakery>=0.1,<0.2
+wagtail>=2.2,<2.3
+wagtail-bakery>=0.3,<0.4
