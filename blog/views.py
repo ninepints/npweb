@@ -6,7 +6,7 @@ from django.conf import settings
 from django.db.models import Count
 from django.db.models.functions import ExtractMonth, ExtractYear
 from django.test import RequestFactory
-from wagtail.wagtailcore.models import Page
+from wagtail.core.models import Page
 from wagtailbakery.views import WagtailBakeryView
 
 from .models import BlogIndex, BlogPostTag

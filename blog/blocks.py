@@ -4,11 +4,11 @@ from pygments import highlight
 from pygments.formatters.html import HtmlFormatter
 from pygments.lexers import get_all_lexers, get_lexer_by_name
 
-from wagtail.wagtailcore.blocks import ChoiceBlock, RichTextBlock, StructBlock, TextBlock
-from wagtail.wagtailcore.blocks.stream_block import StreamBlock
-from wagtail.wagtaildocs.blocks import DocumentChooserBlock
-from wagtail.wagtailembeds.blocks import EmbedBlock
-from wagtail.wagtailimages.blocks import ImageChooserBlock
+from wagtail.core.blocks import ChoiceBlock, RichTextBlock, StructBlock, TextBlock
+from wagtail.core.blocks.stream_block import StreamBlock
+from wagtail.documents.blocks import DocumentChooserBlock
+from wagtail.embeds.blocks import EmbedBlock
+from wagtail.images.blocks import ImageChooserBlock
 
 
 class CodeBlock(StructBlock):
