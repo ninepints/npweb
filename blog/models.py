@@ -17,12 +17,12 @@ from modelcluster.contrib.taggit import ClusterTaggableManager
 
 from taggit.models import TaggedItemBase
 
-from wagtail.contrib.wagtailroutablepage.models import RoutablePageMixin, route
-from wagtail.wagtailadmin.edit_handlers import FieldPanel, StreamFieldPanel
-from wagtail.wagtailcore.models import Page
-from wagtail.wagtailcore.fields import StreamField
-from wagtail.wagtailcore.url_routing import RouteResult
-from wagtail.wagtailimages.edit_handlers import ImageChooserPanel
+from wagtail.contrib.routable_page.models import RoutablePageMixin, route
+from wagtail.admin.edit_handlers import FieldPanel, StreamFieldPanel
+from wagtail.core.models import Page
+from wagtail.core.fields import StreamField
+from wagtail.core.url_routing import RouteResult
+from wagtail.images.edit_handlers import ImageChooserPanel
 
 from .blocks import ContentBlock, ContentMethodsMixin
 
