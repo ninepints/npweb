@@ -5,12 +5,16 @@ import os
 import re
 
 from bakery.feeds import BuildableFeed
+
 from django.conf import settings
+from django.core.exceptions import ValidationError
+from django.core.validators import FileExtensionValidator
 from django.db import models
 from django.db.models import Q
 from django.http import Http404, HttpResponseRedirect, HttpResponsePermanentRedirect
 from django.test import RequestFactory
 from django.utils.feedgenerator import Atom1Feed
+from django.utils.translation import gettext_lazy as _
 
 from modelcluster.fields import ParentalKey
 from modelcluster.contrib.taggit import ClusterTaggableManager
@@ -18,11 +22,13 @@ from modelcluster.contrib.taggit import ClusterTaggableManager
 from taggit.models import TaggedItemBase
 
 from wagtail.contrib.routable_page.models import RoutablePageMixin, route
-from wagtail.admin.edit_handlers import FieldPanel, StreamFieldPanel
+from wagtail.admin.edit_handlers import FieldPanel, MultiFieldPanel, StreamFieldPanel
 from wagtail.core.models import Page
 from wagtail.core.fields import StreamField
 from wagtail.core.url_routing import RouteResult
 from wagtail.images.edit_handlers import ImageChooserPanel
+from wagtail.snippets.edit_handlers import SnippetChooserPanel
+from wagtail.snippets.models import register_snippet
 
 from .blocks import ContentBlock, ContentMethodsMixin
 
@@ -48,6 +54,69 @@ class ResponseOverrideWrapper(object):
 
     def __getattr__(self, item):
         return getattr(self.page, item)
+
+
+@register_snippet
+class HeroImage(models.Model):
+    name = models.CharField(max_length=128)
+
+    wagtail_image = models.ForeignKey(
+        'wagtailimages.Image',
+        null=True,
+        blank=True,
+        on_delete=models.CASCADE,
+        related_name='+'
+    )
+    svg_image = models.FileField(upload_to='hero_images/', blank=True, validators=[FileExtensionValidator(['svg'])])
+
+    add_parallax = models.BooleanField()
+    repeat = models.CharField(
+        'background repeat',
+        max_length=11,
+        choices=[
+            ('repeat_none', 'No repeat'),
+            ('repeat_x', 'Horizontally'),
+            ('repeat_y', 'Vertically'),
+            ('repeat_both', 'Both directions'),
+        ],
+        default='repeat_none'
+    )
+    position = models.CharField(
+        'background position',
+        max_length=13,
+        choices=[
+            ('top left', 'Top left'),
+            ('top center', 'Top center'),
+            ('top right', 'Top right'),
+            ('mid left', 'Mid left'),
+            ('mid center', 'Mid center'),
+            ('mid right', 'Mid right'),
+            ('bottom left', 'Bottom left'),
+            ('bottom center', 'Bottom center'),
+            ('bottom right', 'Bottom right'),
+        ],
+        default='mid center'
+    )
+
+    panels = [
+        FieldPanel('name'),
+        ImageChooserPanel('wagtail_image'),
+        FieldPanel('svg_image'),
+        MultiFieldPanel([
+            FieldPanel('add_parallax'),
+            FieldPanel('repeat'),
+            FieldPanel('position'),
+        ], heading='Display options'),
+    ]
+
+    def __str__(self):
+        return self.name
+
+    def clean(self):
+        if not self.wagtail_image and not self.svg_image:
+            raise ValidationError(_('Either a Wagtail image or SVG image is required.'))
+        if self.wagtail_image and self.svg_image:
+            raise ValidationError(_('Only one Wagtail image or SVG image is allowed.'))
 
 
 class BlogPostFeed(BuildableFeed):
@@ -124,7 +193,7 @@ class BasePage(Page):
     is_creatable = False
 
     hero_image = models.ForeignKey(
-        'wagtailimages.Image',
+        HeroImage,
         null=True,
         blank=True,
         on_delete=models.SET_NULL,
@@ -132,7 +201,7 @@ class BasePage(Page):
     )
 
     content_panels = Page.content_panels + [
-        ImageChooserPanel('hero_image')
+        SnippetChooserPanel('hero_image')
     ]
 
 
@@ -221,8 +290,8 @@ class BlogIndex(RoutablePageMixin, BasePage):
         context = super().get_context(request, *args, **kwargs)
 
         posts = kwargs['posts']
-
         full_posts = context.get('full_posts', False)
+
         def limit(blocks):
             return blocks if full_posts else itertools.islice(blocks, 1)
 
