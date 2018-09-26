@@ -6,22 +6,28 @@
 {% block title %}{% firstof title page.seo_title page.title %} - ninepints{% endblock %}
 
 {% block header %}
-    <header class="parallax_section"{% if page.hero_image %} id="hero"{% endif %}>
-        {% if page.hero_image %}
-            {% image page.hero_image original as hero_image %}
-            <div id="hero_image" class="cover_img layer1" style="background-image: url({{ hero_image.url }})"></div>
-            <div id="hero_gradient" class="layer0">
-        {% endif %}
+    {% if page.hero_image %}
+        {% with page.hero_image as hero %}
+            <header class="parallax_section" id="hero">
+                <div id="hero_image"
+                    class="layer{{ hero.add_parallax|yesno:'1,0' }} {{ hero.repeat }} {{ hero.position }}"
+                    style="background-image: url({% if hero.wagtail_image %}{% image hero.wagtail_image original as wimg %}{{ wimg.url }}{% elif hero.svg_image %}{{ hero.svg_image.url }}{% endif %})">
+                </div>
+                <div class="layer0">
+        {% endwith %}
+    {% else %}
+        <header class="parallax_section">
+    {% endif %}
 
-        {% block header_content %}
-            <div class="col_container">
-                <h1 class="col12">{% firstof hero_title title page.title %}</h1>
-            </div>
-        {% endblock %}
+    {% block header_content %}
+        <div class="col_container">
+            <h1 class="col12">{% firstof hero_title title page.title %}</h1>
+        </div>
+    {% endblock %}
 
-        {% if page.hero_image %}
-            </div>
-        {% endif %}
+    {% if page.hero_image %}
+        </div>
+    {% endif %}
     </header>
 {% endblock %}
 
