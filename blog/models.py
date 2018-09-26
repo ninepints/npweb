@@ -27,15 +27,16 @@ from wagtail.images.edit_handlers import ImageChooserPanel
 from .blocks import ContentBlock, ContentMethodsMixin
 
 
-pagination_regex = r'(?:page/(?P<page_num>[1-9]\d+|[2-9])/)?'
+PAGINATION_REGEX = r'(?:page/(?P<page_num>[1-9]\d+|[2-9])/)?'
 
 
 class ResponseOverrideWrapper(object):
     """
-    Wrapper for a page object that will always serve a particular response.
+    Wrapper for a Page instance that will always serve a particular response.
     This is a workaround for our inability to redirect the user during routing.
     We could raise a Http301 exception if one existed, but right now
-    redirection requires us to return a HttpResponse.
+    redirection requires us to return a response object. All method calls
+    aside from serve() are forwarded to the wrapped Page.
     """
 
     def __init__(self, page, response):
@@ -147,22 +148,22 @@ class BlogIndex(RoutablePageMixin, BasePage):
     posts_per_pagination_page = 3
     feed_view = BlogPostFeed()
 
-    @route(r'^' + pagination_regex + '$')
+    @route('^' + PAGINATION_REGEX + '$')
     def all_posts(self, request, page_num=None):
         page_num = page_num and int(page_num)
         return self.paginate(request, posts=self.public_posts(),
                              view_name='all_posts', view_kwargs={'page_num': page_num}, title=self.title)
 
-    @route(r'^tag/(?P<tag>[\a-zA-Z0-9_-]+)/' + pagination_regex + r'$')
+    @route(r'^tag/(?P<tag>[a-zA-Z0-9_-]+)/' + PAGINATION_REGEX + '$')
     def posts_by_tag(self, request, tag, page_num=None):
         page_num = page_num and int(page_num)
         return self.paginate(request, posts=self.public_posts().filter(tags__name=tag),
                              view_name='posts_by_tag', view_kwargs={'tag': tag, 'page_num': page_num},
                              title='Posts tagged "{}"'.format(tag), hero_title='#{}'.format(tag))
 
-    @route(r'^(?P<year>[1-9]\d*)/' + pagination_regex + r'$')
-    @route(r'^(?P<year>[1-9]\d*)/(?P<month>1[0-2])/' + pagination_regex + r'$')
-    @route(r'^(?P<year>[1-9]\d*)/0(?P<month>[1-9])/' + pagination_regex + r'$')
+    @route(r'^(?P<year>[1-9]\d*)/' + PAGINATION_REGEX + '$')
+    @route(r'^(?P<year>[1-9]\d*)/(?P<month>1[0-2])/' + PAGINATION_REGEX + '$')
+    @route(r'^(?P<year>[1-9]\d*)/0(?P<month>[1-9])/' + PAGINATION_REGEX + '$')
     def posts_by_date(self, request, year, month=None, page_num=None):
         year = int(year)
         month = month and int(month)
@@ -303,7 +304,7 @@ class BlogPost(BasePage, ContentMethodsMixin):
 
     content_panels = BasePage.content_panels + [
         FieldPanel('pub_date'),
-        StreamFieldPanel('body')
+        StreamFieldPanel('body'),
     ]
 
     promote_panels = BasePage.promote_panels + [
