@@ -18,7 +18,7 @@ ALLOWED_HOSTS = [
 # Application definition
 
 INSTALLED_APPS = [
-    'blog',
+    'blog.apps.BlogConfig',
 
     'wagtail.contrib.routable_page',
 
