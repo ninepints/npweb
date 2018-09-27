@@ -99,8 +99,8 @@ class ContentMethodsMixin(object):
 
     @staticmethod
     def block_contains_math(block):
-        return (isinstance(block.block, RichTextBlock) and
-                re.search(r'(?:\\\[.*\\\])|(?:\\\(.*\\\))', block.value.source))
+        return isinstance(block.block, MathBlock) or (isinstance(block.block, RichTextBlock) and
+                re.search(r'(?:\\\[.*\\\])|(?:\\\(.*\\\))', block.value.source) is not None)
 
     def contains_code(self):
         return any(isinstance(block.block, CodeBlock) for block in self.content_field)
