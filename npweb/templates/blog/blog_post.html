@@ -4,10 +4,10 @@
 
 {% block content %}
     <article>
-        {% include "blog/content_stream.html" with stream=page.body %}
+        {% include "stream_nowrappers.html" with stream=page.body %}
         {% include "blog/blog_post_meta.html" with post=page %}
     </article>
-    <div class="col_container alignleft marginless padded">
+    <div class="parallax_section"><div class="col_container alignleft">
         {% if page.next_post %}
             <a class="col4 blocklink sans_serif pagination prev" href="{% pageurl page.next_post %}" rel="next">
                 <p>Next:</p><p>{{ page.next_post.title }}</p>
@@ -22,5 +22,5 @@
         {% else %}
             <div class="col4"></div>
         {% endif %}
-    </div>
+    </div></div>
 {% endblock %}

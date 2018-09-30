@@ -11,36 +11,42 @@
 
 {% block content %}
     {% for post in posts %}
-        <article>
-            <div class="col_container alignleft marginless">
+        <article class="margincollapsable">
+
+            <div class="parallax_section margincollapsable"><div class="col_container alignleft">
                 <h2 class="col8 sans_serif"><a href="{% pageurl post %}">{{ post.title }}</a></h2>
-            </div>
+            </div></div>
+
             {% if full_posts %}
-                {% include "blog/content_stream.html" with stream=post.body %}
-                {% include "blog/blog_post_meta.html" %}
+                {% include "stream_nowrappers.html" with stream=post.body %}
+                {% include "blog/blog_post_meta.html" with post=post %}
             {% else %}
-                <div class="col_container alignleft marginless"><div class="col8">
-                    {% with first_block=post.first_text_block no_more_blocks=post.first_text_block_is_all_there_is %}
-                        {% if not first_block and no_more_blocks %}
-                            <p class="faded sans_serif marginless">No content</p>
-                        {% else %}
-                            {% if first_block %}
-                                {% include_block first_block %}
-                            {% endif %}
-                            {% if not no_more_blocks %}
-                                <p class="sans_serif"><a href="{% pageurl post %}">Read more ›</a></p>
-                            {% endif %}
+                {% with first_block=post.first_text_block no_more_blocks=post.first_text_block_is_all_there_is %}
+                    {% if not first_block and no_more_blocks %}
+                        <div class="parallax_section margincollapsable"><div class="col_container alignleft">
+                            <p class="col8 faded sans_serif">No content</p>
+                        </div></div>
+                    {% else %}
+                        {% if first_block %}
+                            {% include_block first_block %}
                         {% endif %}
-                    {% endwith %}
-                </div></div>
-                {% include "blog/blog_post_meta.html" %}
+                        {% if not no_more_blocks %}
+                            <div class="parallax_section margincollapsable"><div class="col_container alignleft">
+                                <p class="col8 sans_serif"><a href="{% pageurl post %}">Read more ›</a></p>
+                            </div></div>
+                        {% endif %}
+                    {% endif %}
+                {% endwith %}
+
+                {% include "blog/blog_post_meta.html" with post=post %}
             {% endif %}
+
         </article>
     {% empty %}
         <h2 class="faded center sans_serif">No posts to show</h2>
     {% endfor %}
 
-    <div class="col_container alignleft marginless padded">
+    <div class="col_container alignleft">
         {% if prev_page_url %}
             <a class="col4 blocklink sans_serif pagination prev" href="{{ prev_page_url }}" rel="prev">
                 <p>Newer posts</p>
@@ -48,6 +54,7 @@
         {% else %}
             <div class="col4"></div>
         {% endif %}
+
         {% if next_page_url %}
             <a class="col4 blocklink sans_serif pagination next" href="{{ next_page_url }}" rel="next">
                 <p>Older posts</p>

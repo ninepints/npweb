@@ -172,7 +172,7 @@ class BlogPostFeed(BuildableFeed):
     def item_title(self, item):
         return item.title
 
-    description_template = 'blog/content_stream.html'
+    description_template = 'stream_nowrappers.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

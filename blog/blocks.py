@@ -4,7 +4,8 @@ from pygments import highlight
 from pygments.formatters.html import HtmlFormatter
 from pygments.lexers import get_all_lexers, get_lexer_by_name
 
-from wagtail.core.blocks import ChoiceBlock, RichTextBlock, StructBlock, TextBlock
+from wagtail.core.blocks import (BooleanBlock, CharBlock, ChoiceBlock, IntegerBlock, ListBlock, RichTextBlock,
+                                 StructBlock, TextBlock)
 from wagtail.core.blocks.stream_block import StreamBlock
 from wagtail.documents.blocks import DocumentChooserBlock
 from wagtail.embeds.blocks import EmbedBlock
@@ -66,13 +67,37 @@ class RichTextWithCodeBlock(CleanedRichTextBlock):
         return super().value_from_form(value)
 
 
-class ContentBlock(StreamBlock):
-    text = RichTextWithCodeBlock()
+class ImageRowBlock(StructBlock):
+    images = ListBlock(StructBlock([
+        ('image', ImageChooserBlock()),
+        ('weight', IntegerBlock(min_value=1, max_value=99, default=1,
+                                help_text='How much space to allocate to this image relative to others'))
+    ]))
+    caption = CharBlock(required=False)
+
+    class Meta:
+        icon = 'image'
+        template = 'blog/blocks/image_row.html'
+
+
+class FullBleedImageBlock(StructBlock):
     image = ImageChooserBlock()
-    embed = EmbedBlock()
-    document = DocumentChooserBlock()
+    caption = CharBlock(required=False)
+    add_parallax = BooleanBlock()
+
+    class Meta:
+        icon = 'image'
+        template = 'blog/blocks/full_bleed_image.html'
+
+
+class ContentBlock(StreamBlock):
+    text = RichTextWithCodeBlock(template='blog/blocks/rich_text.html')
     code = CodeBlock()
     math = MathBlock()
+    image_row = ImageRowBlock()
+    full_bleed_image = FullBleedImageBlock()
+    embed = EmbedBlock()
+    document = DocumentChooserBlock()
 
 
 class ContentMethodsMixin(object):

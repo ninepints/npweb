@@ -56,16 +56,6 @@ nav
     justify-content: flex-end;
 }
 
-.col_container.marginless
-{
-    margin: -1.75rem auto;
-}
-
-.col_container.margincollapsable + .col_container.margincollapsable
-{
-    margin: -1.75rem auto 0;
-}
-
 .col_container > *
 {
     padding-left: 1rem;
@@ -216,6 +206,32 @@ pre > code
 }
 
 
+/* Sketchy reimplementation of margin collapsing because the way I've done the
+   layout means I can't use the native implementation. The idea here is to use
+   the margincollapsable class to take away a "standard" 1.75rem of top margin
+   from the first thing in a column. */
+
+.margincollapsable + .margincollapsable h1:first-child
+{
+    margin-top: 3.5rem;
+}
+
+.margincollapsable + .margincollapsable h2:first-child
+{
+    margin-top: 1.75rem;
+}
+
+.margincollapsable + .margincollapsable h3:first-child
+{
+    margin-top: 0;
+}
+
+.margincollapsable + .margincollapsable p:first-child
+{
+    margin-top: 0;
+}
+
+
 /* Miscellanous element styles */
 
 a:link,
@@ -300,15 +316,20 @@ pre
     text-align: center;
 }
 
-.marginless
+.lightgray
 {
-    margin: 0;
+    background-color: hsl(280, 6%, 95%);
 }
 
-.padded
+.darkgray
 {
-    padding-top: 1.75rem;
-    padding-bottom: 1.75rem;
+    color: white;
+    background-color: hsl(280, 8%, 23%);
+}
+
+.transparent
+{
+    background-color: transparent;
 }
 
 
@@ -419,11 +440,6 @@ header h1
     text-decoration: none;
 }
 
-#main_nav.with_hero
-{
-    background-color: hsl(280, 8%, 23%);
-}
-
 #main_nav.with_hero a
 {
     color: white;
@@ -448,6 +464,7 @@ header h1
 a.pagination
 {
     display: block;
+    margin: 0 0 1.75rem;
     padding: 1.75rem 1rem;
     position: relative;
 }
@@ -488,11 +505,103 @@ a.pagination
     margin-top: -0.875rem;
 }
 
-/* Colored sections */
 
-.section_lightgray > .col_container > *
+/* Mid-post images */
+
+.caption
 {
-    background-color: hsl(280, 6%, 95%);
+    font-size: 0.75rem;
+    line-height: 0.875rem;
+    margin: 0.875rem 0 1.75rem;
+}
+
+.image_row
+{
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    padding: 0 0.5625rem;
+}
+
+.row_image
+{
+    height: 17.5rem;
+    margin: 1.75rem 0.4375rem;
+    flex-basis: 0;
+}
+
+.row_image img
+{
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.margincollapsable + .image_row_section .row_image
+{
+    margin-top: 0;
+}
+
+.image_row_section + .image_row_section .row_image
+{
+    margin-top: -0.875rem;
+}
+
+.image_row_section .caption
+{
+    margin-top: -0.875rem;
+}
+
+.full_bleed_section
+{
+    display: block;
+    height: 80vh;
+}
+
+.full_bleed_section img
+{
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Some math notes for the parallax effect: let N be the distance between the
+   browser plane and the image plane, relative to the distance between the
+   browser plane and the user (e.g. 0.25 for the current "layer 1" definition).
+   Let X be the height of the "gap" in the browser plane through which the
+   image is viewed. Then we need to extend the image by (N/(N+1))(100vh-X) in
+   the browser plane, or N(100vh-X) in the image plane, to make it long enough
+   to always cover the gap as the user scrolls. */
+
+.full_bleed_section img.layer1
+{
+    height: calc(0.2 * (100vh - 100%) + 100%);
+}
+
+.full_bleed_section img.layer2
+{
+    height: calc(0.334 * (100vh - 100%) + 100%);
+}
+
+.full_bleed_section img.layer3
+{
+    height: calc(0.5 * (100vh - 100%) + 100%);
+}
+
+.full_bleed_section img.layer4
+{
+    height: calc(0.667 * (100vh - 100%) + 100%);
+}
+
+.full_bleed_section a
+{
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
 }
 
 
