@@ -1,6 +1,6 @@
 {% load wagtailroutablepage_tags %}
 
-<div class="col_container alignleft margincollapsable"><div class="col8">
+<div class="parallax_section margincollapsable"><div class="col_container alignleft"><div class="col8">
     <p class="faded sans_serif">
         <a href="{% routablepageurl post.get_parent.specific "posts_by_date" year=post.pub_date.year month=post.pub_date.month %}">{{ post.pub_date|date:"F j, Y" }}</a>
         {% if post.tags.count > 0 %}<br/>{% endif %}
@@ -8,4 +8,4 @@
             <a href="{% routablepageurl post.get_parent.specific "posts_by_tag" tag=tag.slug %}">#{{ tag }}</a>
         {% endfor %}
     </p>
-</div></div>
+</div></div></div>

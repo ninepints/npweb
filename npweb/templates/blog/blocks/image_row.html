@@ -1,0 +1,20 @@
+{% load wagtailimages_tags %}
+
+<div class="parallax_section image_row_section"><div class="col_container alignleft"><div class="col8 image_row">
+    {% for weighted_image in value.images %}
+        {# We know the image height is 17.5rem = 280px, and to be safe we assume full page width = 612px with current layout #}
+        {% image weighted_image.image original as orig %}
+        {% image weighted_image.image min-612x280 as single %}
+        {% image weighted_image.image min-1224x560 as double %}
+        {% image weighted_image.image min-1836x840 as triple %}
+        <a href="{{ orig.url }}" class="row_image darkgray" style="flex-grow: {{ weighted_image.weight }}">
+            <img alt="{{ orig.alt }}" src="{{ single.url }}" srcset="{{ single.url }} 1x, {{ double.url }} 2x, {{ triple.url }} 3x"/>
+        </a>
+    {% endfor %}
+</div></div></div>
+
+{% if value.caption %}
+    <div class="parallax_section margincollapsable image_row_section"><div class="col_container alignleft"><div class="col8">
+        <p class="sans_serif caption">{{ value.caption }}</p>
+    </div></div></div>
+{% endif %}
