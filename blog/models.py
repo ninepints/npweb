@@ -1,6 +1,5 @@
 import datetime
 import itertools
-import math
 import os
 import re
 
@@ -8,6 +7,7 @@ from bakery.feeds import BuildableFeed
 
 from django.conf import settings
 from django.core.exceptions import ValidationError
+from django.core.paginator import Paginator
 from django.core.validators import FileExtensionValidator
 from django.db import models
 from django.db.models import Q
@@ -16,15 +16,15 @@ from django.test import RequestFactory
 from django.utils.feedgenerator import Atom1Feed
 from django.utils.translation import gettext_lazy as _
 
-from modelcluster.fields import ParentalKey
 from modelcluster.contrib.taggit import ClusterTaggableManager
+from modelcluster.fields import ParentalKey
 
 from taggit.models import TaggedItemBase
 
-from wagtail.contrib.routable_page.models import RoutablePageMixin, route
 from wagtail.admin.edit_handlers import FieldPanel, MultiFieldPanel, StreamFieldPanel
-from wagtail.core.models import Page
+from wagtail.contrib.routable_page.models import RoutablePageMixin, route
 from wagtail.core.fields import StreamField
+from wagtail.core.models import Page
 from wagtail.core.url_routing import RouteResult
 from wagtail.images.edit_handlers import ImageChooserPanel
 from wagtail.snippets.edit_handlers import SnippetChooserPanel
@@ -254,37 +254,32 @@ class BlogIndex(RoutablePageMixin, BasePage):
         return self.feed_view(request, blog_index=self)
 
     def paginate(self, request, posts, view_name, view_kwargs=None, **kwargs):
-        post_count = posts.count()
-        max_page = max(math.ceil(post_count / self.posts_per_pagination_page), 1)
+        paginator = Paginator(posts.specific().order_by('-pub_date', '-id'), self.posts_per_pagination_page)
         view_kwargs = {k: v for k, v in view_kwargs.items() if v is not None}
         page_num = view_kwargs.get('page_num', 1)
 
-        if page_num > max_page == 1:
-            del view_kwargs['page_num']
+        if page_num > paginator.num_pages:
+            if paginator.num_pages > 1:
+                view_kwargs['page_num'] = paginator.num_pages
+            else:
+                del view_kwargs['page_num']
             return HttpResponseRedirect(self.url + self.reverse_subpage(view_name, kwargs=view_kwargs))
-        elif page_num > max_page:
-            view_kwargs['page_num'] = max_page
-            return HttpResponseRedirect(self.url + self.reverse_subpage(view_name, kwargs=view_kwargs))
 
-        pagination_start_index = (page_num - 1) * self.posts_per_pagination_page
-        pagination_end_index = page_num * self.posts_per_pagination_page
+        page = paginator.page(page_num)
+        prev_url = next_url = None
 
-        prev_page_url = next_page_url = None
-        if page_num == 2:
-            del view_kwargs['page_num']
-            prev_page_url = self.url + self.reverse_subpage(view_name, kwargs=view_kwargs)
-        elif page_num > 2:
-            view_kwargs['page_num'] = page_num - 1
-            prev_page_url = self.url + self.reverse_subpage(view_name, kwargs=view_kwargs)
-        if post_count > pagination_end_index:
-            view_kwargs['page_num'] = page_num + 1
-            next_page_url = self.url + self.reverse_subpage(view_name, kwargs=view_kwargs)
+        if page.has_previous():
+            if page.previous_page_number() > 1:
+                view_kwargs['page_num'] = page.previous_page_number()
+            else:
+                del view_kwargs['page_num']
+            prev_url = self.url + self.reverse_subpage(view_name, kwargs=view_kwargs)
 
-        posts = posts.specific().order_by('-pub_date', '-id')[pagination_start_index:pagination_end_index]
+        if page.has_next():
+            view_kwargs['page_num'] = page.next_page_number()
+            next_url = self.url + self.reverse_subpage(view_name, kwargs=view_kwargs)
 
-        return Page.serve(self, request, posts=posts,
-                          prev_page_url=prev_page_url, next_page_url=next_page_url,
-                          **kwargs)
+        return Page.serve(self, request, posts=page, prev_page_url=prev_url, next_page_url=next_url, **kwargs)
 
     def get_context(self, request, *args, **kwargs):
         context = super().get_context(request, *args, **kwargs)
