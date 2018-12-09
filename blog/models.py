@@ -5,7 +5,6 @@ import re
 
 from bakery.feeds import BuildableFeed
 
-from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.core.paginator import Paginator
 from django.core.validators import FileExtensionValidator
@@ -131,24 +130,13 @@ class BlogPostFeed(BuildableFeed):
         return os.path.join(self.feed_url(obj)[1:], 'atom.xml')
 
     def create_request(self, url, obj):
+        # Essentially what the superclass method does, but this stops
+        # all the feed links from pointing to domain "testserver"
         hostname = obj.get_site().hostname
         return RequestFactory(SERVER_NAME=hostname).get(url)
 
     def get_content(self, obj):
-        return self(self.request, blog_index=obj).content
-
-    def build_queryset(self):
-        for obj in self.get_queryset():
-            build_path = self.build_path(obj)
-
-            # Bakery passes build_path as the URL, but that results in the feed
-            # containing an incorrect URL for itself. Pass the real URL instead
-            url = self.feed_url(obj)
-            self.request = self.create_request(url, obj)
-
-            self.prep_directory(build_path)
-            path = os.path.join(settings.BUILD_DIR, build_path)
-            self.build_file(path, self.get_content(obj))
+        return super().get_content(blog_index=obj)
 
     # The standard Feed methods
 
