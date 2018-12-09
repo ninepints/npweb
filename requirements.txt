@@ -1,5 +1,5 @@
 Django>=2.1,<2.2
-django-bakery==0.12.6
+django-bakery==0.12.7
 Pygments>=2.2,<2.3
 wagtail>=2.3,<2.4
 wagtail-bakery>=0.3,<0.4
