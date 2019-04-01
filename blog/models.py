@@ -13,6 +13,7 @@ from django.db.models import Q
 from django.http import Http404, HttpResponseRedirect, HttpResponsePermanentRedirect
 from django.test import RequestFactory
 from django.utils.feedgenerator import Atom1Feed
+from django.utils.timezone import get_default_timezone, localtime
 from django.utils.translation import gettext_lazy as _
 
 from modelcluster.contrib.taggit import ClusterTaggableManager
@@ -317,7 +318,7 @@ class BlogIndex(RoutablePageMixin, BasePage):
                         raise Http404
 
                     # Redirect to the canonical url if the request included incorrect dates
-                    if str(post.pub_date.year) != year or '{:02}'.format(post.pub_date.month) != month:
+                    if str(post.pub_date_norm.year) != year or '{:02}'.format(post.pub_date_norm.month) != month:
                         canonical_post_url = post.url
                         if remaining_components:
                             canonical_post_url += '/'.join(remaining_components) + '/'
@@ -369,11 +370,15 @@ class BlogPost(BasePage, ContentMethodsMixin):
         """
 
         if parent:
-            self.url_path = parent.url_path + '{0.year}/{0.month:02}/{1}/'.format(self.pub_date, self.slug)
+            self.url_path = parent.url_path + '{0.year}/{0.month:02}/{1}/'.format(self.pub_date_norm, self.slug)
         else:
             self.url_path = '/'
 
         return self.url_path
+
+    @property
+    def pub_date_norm(self):
+        return localtime(self.pub_date, get_default_timezone())
 
     def prev_post(self):
         q = Q(pub_date__lt=self.pub_date)
