@@ -55,16 +55,11 @@ class CleanedRichTextBlock(RichTextBlock):
 class RichTextWithCodeBlock(CleanedRichTextBlock):
     """
     Rich text block that translates square-bracket code tags into the HTML
-    equivalent for display purposes. We could mess with the editor to get it
-    to support inline code, but this is a lot easier.
+    equivalent for display purposes. The implementation has been removed now
+    that Draftail has code support, but the class is still here because it's
+    referenced by old migrations.
     """
-    def value_for_form(self, value):
-        value = super().value_for_form(value)
-        return re.sub(r'<(/?)code>', r'[\1code]', value)
-
-    def value_from_form(self, value):
-        value = re.sub(r'\[(/?)code\]', r'<\1code>', value)
-        return super().value_from_form(value)
+    pass
 
 
 class ImageRowBlock(StructBlock):
@@ -91,7 +86,9 @@ class FullBleedImageBlock(StructBlock):
 
 
 class ContentBlock(StreamBlock):
-    text = RichTextWithCodeBlock(template='blog/blocks/rich_text.html')
+    text = CleanedRichTextBlock(features=['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'bold', 'italic', 'ol', 'ul',
+                                          'link', 'document', 'code'],
+                                template='blog/blocks/rich_text.html')
     code = CodeBlock()
     math = MathBlock()
     image_row = ImageRowBlock()
