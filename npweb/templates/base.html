@@ -1,6 +1,7 @@
 {% load static %}
 {% load wagtailcore_tags %}
 {% load wagtailroutablepage_tags %}
+{% load compress %}
 
 <!DOCTYPE html>
 <html>
@@ -10,8 +11,10 @@
         <meta name="viewport" content="width=device-width">
         {% block extra_head %}{% endblock %}
 
-        <link rel="stylesheet" type="text/css" href="{% static 'css/base.css' %}"/>
-        <link rel="stylesheet" type="text/css" href="{% static 'css/fonts.css' %}"/>
+        {% compress css %}
+            <link rel="stylesheet" type="text/css" href="{% static 'css/base.css' %}"/>
+            <link rel="stylesheet" type="text/css" href="{% static 'css/fonts.css' %}"/>
+        {% endcompress %}
         {% block extra_css %}{% endblock %}
     </head>
 
