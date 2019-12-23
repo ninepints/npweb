@@ -1,8 +1,13 @@
 {% extends 'page.html' %}
 
 {% load wagtailcore_tags %}
+{% load wagtailroutablepage_tags %}
 
 {% block title %}ninepints{% endblock %}
+
+{% block extra_head %}
+    <link rel="alternate" type="application/atom+xml" href="{% routablepageurl page 'feed' %}"/>
+{% endblock %}
 
 {% block extra_js %}
     {{ block.super }}
