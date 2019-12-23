@@ -1,4 +1,7 @@
 Django==2.2.*
 Pygments==2.5.*
+django-libsass==0.7.*
+django_compressor==2.3.*
+libsass==0.19.*
 wagtail==2.7.*
 wagtail-bakery==0.4.*
