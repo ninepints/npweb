@@ -4,7 +4,7 @@
  * (https://github.com/mozmorris/tomorrow-pygments). */
 
 code .hll { background-color: #d6d6d6 }
-code { background: #ffffff; color: #4d4d4c }
+pre > code { color: #4d4d4c }
 code .c { color: #8e908c } /* Comment */
 code .err { color: #c82829 } /* Error */
 code .k { color: #8959a8 } /* Keyword */
@@ -80,7 +80,7 @@ code .il { color: #f5871f } /* Literal.Number.Integer.Long */
 @media (prefers-color-scheme: dark)
 {
     code .hll { background-color: #424242 }
-    code { background: #000000; color: #eaeaea }
+    pre > code { color: #eaeaea }
     code .c { color: #969896 } /* Comment */
     code .err { color: #d54e53 } /* Error */
     code .k { color: #c397d8 } /* Keyword */
