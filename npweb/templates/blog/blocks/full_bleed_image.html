@@ -1,13 +1,13 @@
 {% load wagtailimages_tags %}
 
-<div class="parallax_section transparent full_bleed_section">
+<div class="parallax_section full_bleed_section bg_transparent">
     {% image value.image original as rendition %}
     <a class="full_bleed_image layer0" href="{{ rendition.url }}"></a>
-    <img class="full_bleed_image layer{{ value.add_parallax|yesno:'1,0' }} darkgray" alt="{{ rendition.alt }}" src="{{ rendition.url }}"/>
+    <img class="full_bleed_image layer{{ value.add_parallax|yesno:'1,0' }} bg_media" alt="{{ rendition.alt }}" src="{{ rendition.url }}"/>
 </div>
 
 {% if value.caption %}
-    <div class="parallax_section darkgray"><div class="col_container alignleft">
+    <div class="parallax_section darkmode"><div class="col_container alignleft">
         <p class="col8 sans_serif caption">{{ value.caption }}</p>
     </div></div>
 {% endif %}

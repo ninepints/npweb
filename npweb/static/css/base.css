@@ -1,3 +1,110 @@
+/* Colors */
+
+html,
+.lightmode
+{
+    --color-bg-primary: white;
+    --color-bg-primary-hover: hsl(280, 6%, 97%);
+    --color-bg-primary-active: hsl(280, 6%, 95%);
+
+    --color-bg-secondary: hsl(280, 6%, 95%);
+
+    --color-text-primary: hsl(280, 8%, 23%);
+
+    --color-text-secondary: hsl(247, 5%, 66%);
+    --color-text-secondary-hover: hsl(247, 5%, 66%);
+    --color-text-secondary-active: hsl(247, 5%, 60%);
+
+    --color-tint: hsl(215, 100%, 61%);
+    --color-tint-hover: hsl(215, 100%, 61%);
+    --color-tint-active: hsl(215, 100%, 55%);
+}
+
+.darkmode,
+.inversecolormode
+{
+    --color-bg-primary: hsl(0, 0%, 0%);
+    --color-bg-primary-hover: hsl(280, 6%, 14%);
+    --color-bg-primary-active: hsl(280, 6%, 13%);
+
+    --color-bg-secondary: hsl(280, 6%, 13%);
+
+    --color-text-primary: hsl(280, 8%, 92%);
+
+    --color-text-secondary: hsl(247, 5%, 60%);
+    --color-text-secondary-hover: hsl(247, 5%, 60%);
+    --color-text-secondary-active: hsl(247, 5%, 54%);
+
+    --color-tint: hsl(215, 100%, 61%);
+    --color-tint-hover: hsl(215, 100%, 61%);
+    --color-tint-active: hsl(215, 100%, 55%);
+}
+
+/* Copies of the above, since we can't combine selectors with media queries */
+@media (prefers-color-scheme: dark)
+{
+    html,
+    .darkmode
+    {
+        --color-bg-primary: hsl(0, 0%, 0%);
+        --color-bg-primary-hover: hsl(280, 6%, 14%);
+        --color-bg-primary-active: hsl(280, 6%, 13%);
+
+        --color-bg-secondary: hsl(280, 6%, 13%);
+
+        --color-text-primary: hsl(280, 8%, 92%);
+
+        --color-text-secondary: hsl(247, 5%, 60%);
+        --color-text-secondary-hover: hsl(247, 5%, 60%);
+        --color-text-secondary-active: hsl(247, 5%, 54%);
+
+        --color-tint: hsl(215, 100%, 61%);
+        --color-tint-hover: hsl(215, 100%, 61%);
+        --color-tint-active: hsl(215, 100%, 55%);
+    }
+
+    .lightmode,
+    .inversecolormode
+    {
+        --color-bg-primary: white;
+        --color-bg-primary-hover: hsl(280, 6%, 97%);
+        --color-bg-primary-active: hsl(280, 6%, 95%);
+
+        --color-bg-secondary: hsl(280, 6%, 95%);
+
+        --color-text-primary: hsl(280, 8%, 23%);
+
+        --color-text-secondary: hsl(247, 5%, 66%);
+        --color-text-secondary-hover: hsl(247, 5%, 66%);
+        --color-text-secondary-active: hsl(247, 5%, 60%);
+
+        --color-tint: hsl(215, 100%, 61%);
+        --color-tint-hover: hsl(215, 100%, 61%);
+        --color-tint-active: hsl(215, 100%, 55%);
+    }
+}
+
+.bg_filled
+{
+    background-color: var(--color-bg-primary);
+}
+
+.bg_secondary
+{
+    background-color: var(--color-bg-secondary);
+}
+
+.bg_transparent
+{
+    background-color: transparent;
+}
+
+.bg_media
+{
+    background-color: hsl(280, 8%, 23%);
+}
+
+
 /* General structure */
 
 body,
@@ -9,7 +116,7 @@ nav
 
 .parallax_section
 {
-    background-color: white;
+    background-color: var(--color-bg-primary);
 }
 
 .layer0
@@ -124,6 +231,22 @@ nav
     flex: 0 1 960px;
 }
 
+@media (max-width: 639px)
+{
+    html
+    {
+        font-size: 0.9rem;
+    }
+}
+
+@media (max-width: 359px)
+{
+    html
+    {
+        font-size: 0.85rem;
+    }
+}
+
 
 /* Typography */
 
@@ -131,11 +254,12 @@ body
 {
     font-size: 1.25rem;
     line-height: 1.75rem;
-    color: hsl(280, 8%, 23%);
+    color: var(--color-text-primary);
     font-family: 'Brando', serif;
     font-weight: normal;
 
     font-variant-numeric: lining-nums;
+    background-color: var(--color-bg-primary);
 }
 
 h1
@@ -181,7 +305,7 @@ code
     line-height: 1.6rem;
     font-family: 'Menlo', monospace;
     font-weight: normal;
-    background-color: hsl(280, 6%, 95%);
+    background-color: var(--color-bg-secondary);
     padding: 0.15rem;
     white-space: pre;
 }
@@ -237,33 +361,34 @@ pre > code
 a:link,
 a:visited
 {
-    color: hsl(215, 100%, 61%);
+    color: var(--color-tint);
     text-decoration: none;
 }
 
 a:link:hover,
 a:visited:hover
 {
+    color: var(--color-tint-hover);
     text-decoration: underline;
 }
 
 a:link:active,
 a:visited:active
 {
-    color: hsl(215, 100%, 55%);
+    color: var(--color-tint-active);
 }
 
 a.blocklink:link:hover,
 a.blocklink:visited:hover
 {
-    background-color: hsl(280, 6%, 97%);
+    background-color: var(--color-bg-primary-hover);
     text-decoration: none;
 }
 
 a.blocklink:link:active,
 a.blocklink:visited:active
 {
-    background-color: hsl(280, 6%, 95%);
+    background-color: var(--color-bg-primary-active);
 }
 
 ul,
@@ -290,7 +415,15 @@ ol.bulletless:not(.col_container > *)
 .faded a:link,
 .faded a:visited
 {
-    color: hsl(247, 5%, 66%);
+    color: var(--color-text-secondary);
+}
+
+.faded a:link:hover,
+.faded a:visited:hover,
+a.faded:link:hover,
+a.faded:visited:hover
+{
+    color: var(--color-text-secondary-hover);
 }
 
 .faded a:link:active,
@@ -298,7 +431,7 @@ ol.bulletless:not(.col_container > *)
 a.faded:link:active,
 a.faded:visited:active
 {
-    color: hsl(247, 5%, 60%);
+    color: var(--color-text-secondary-active);
 }
 
 pre
@@ -316,22 +449,6 @@ pre
     text-align: center;
 }
 
-.lightgray
-{
-    background-color: hsl(280, 6%, 95%);
-}
-
-.darkgray
-{
-    color: white;
-    background-color: hsl(280, 8%, 23%);
-}
-
-.transparent
-{
-    background-color: transparent;
-}
-
 
 /* Hero/header, nav, stuff at the top of the page */
 
@@ -343,12 +460,12 @@ header h1
 #hero
 {
     position: relative;
-    color: white;
+    color: hsl(280, 12%, 90%);
     background-color: transparent;
     display: flex;
     flex-direction: column-reverse;
     min-height: 60vh;
-    text-shadow: hsla(280, 8%, 23%, 0.2) 0 0 1rem;
+    text-shadow: hsla(0, 0%, 0%, 0.2) 0 0 1rem;
 }
 
 #hero_image
@@ -438,24 +555,6 @@ header h1
 #main_nav a:visited:hover
 {
     text-decoration: none;
-}
-
-#main_nav.with_hero a
-{
-    color: white;
-}
-
-#main_nav.with_hero a:link:hover,
-#main_nav.with_hero a:visited:hover
-{
-    background-color: hsl(280, 6%, 32%);
-}
-
-#main_nav.with_hero a:link:active,
-#main_nav.with_hero a:visited:active
-{
-    color: hsl(0, 0%, 88%);
-    background-color: hsl(280, 6%, 30%);
 }
 
 
@@ -605,23 +704,7 @@ a.pagination
 }
 
 
-/* Media queries (for small computers) */
-
-@media (max-width: 639px)
-{
-    html
-    {
-        font-size: 0.9rem;
-    }
-}
-
-@media (max-width: 359px)
-{
-    html
-    {
-        font-size: 0.85rem;
-    }
-}
+/* Parallax media queries */
 
 @supports ((perspective: 160px) and (not (-webkit-overflow-scrolling: touch)))
 {

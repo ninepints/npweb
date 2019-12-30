@@ -7,7 +7,7 @@
         {% image weighted_image.image min-612x280 as single %}
         {% image weighted_image.image min-1224x560 as double %}
         {% image weighted_image.image min-1836x840 as triple %}
-        <a href="{{ orig.url }}" class="row_image darkgray" style="flex-grow: {{ weighted_image.weight }}">
+        <a href="{{ orig.url }}" class="row_image bg_media" style="flex-grow: {{ weighted_image.weight }}">
             <img alt="{{ orig.alt }}" src="{{ single.url }}" srcset="{{ single.url }} 1x, {{ double.url }} 2x, {{ triple.url }} 3x"/>
         </a>
     {% endfor %}
