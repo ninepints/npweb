@@ -1,43 +1,72 @@
 /* Colors */
 
+html {
+    --colordef-light-bg-primary: white;
+    --colordef-light-bg-primary-hover: hsl(280, 6%, 97%);
+    --colordef-light-bg-secondary: hsl(280, 6%, 95%);
+
+    --colordef-dark-bg-primary: black;
+    --colordef-dark-bg-primary-hover: hsl(280, 6%, 14%);
+    --colordef-dark-bg-secondary: hsl(280, 6%, 13%);
+
+    --colordef-bg-media: hsl(280, 8%, 23%);
+
+    --colordef-light-text-primary: hsl(280, 8%, 23%);
+
+    --colordef-dark-text-primary: hsl(280, 8%, 92%);
+
+    --colordef-light-text-contrast: hsla(0, 100%, 100%, 0.2);
+
+    --colordef-dark-text-contrast: hsla(0, 0%, 0%, 0.2);
+
+    --colordef-light-text-secondary: hsl(247, 5%, 66%);
+    --colordef-light-text-secondary-active: hsl(247, 5%, 60%);
+
+    --colordef-dark-text-secondary: hsl(247, 5%, 60%);
+    --colordef-dark-text-secondary-active: hsl(247, 5%, 54%);
+
+    --colordef-tint: hsl(215, 100%, 61%);
+    --colordef-tint-active: hsl(215, 100%, 55%);
+
+    --color-tint: var(--colordef-tint);
+    --color-tint-hover: var(--colordef-tint);
+    --color-tint-active: var(--colordef-tint-active);
+}
+
 html,
 .lightmode
 {
-    --color-bg-primary: white;
-    --color-bg-primary-hover: hsl(280, 6%, 97%);
-    --color-bg-primary-active: hsl(280, 6%, 95%);
+    --color-bg-primary: var(--colordef-light-bg-primary);
+    --color-bg-primary-hover: var(--colordef-light-bg-primary-hover);
+    --color-bg-primary-active: var(--colordef-light-bg-secondary);
 
-    --color-bg-secondary: hsl(280, 6%, 95%);
+    --color-bg-secondary: var(--colordef-light-bg-secondary);
 
-    --color-text-primary: hsl(280, 8%, 23%);
+    --color-text-primary: var(--colordef-light-text-primary);
 
-    --color-text-secondary: hsl(247, 5%, 66%);
-    --color-text-secondary-hover: hsl(247, 5%, 66%);
-    --color-text-secondary-active: hsl(247, 5%, 60%);
+    --color-text-contrast: var(--colordef-light-text-contrast);
 
-    --color-tint: hsl(215, 100%, 61%);
-    --color-tint-hover: hsl(215, 100%, 61%);
-    --color-tint-active: hsl(215, 100%, 55%);
+    --color-text-secondary: var(--colordef-light-text-secondary);
+    --color-text-secondary-hover: var(--colordef-light-text-secondary);
+    --color-text-secondary-active: var(--colordef-light-text-secondary-active);
 }
 
 .darkmode,
 .inversecolormode
 {
-    --color-bg-primary: hsl(0, 0%, 0%);
-    --color-bg-primary-hover: hsl(280, 6%, 14%);
-    --color-bg-primary-active: hsl(280, 6%, 13%);
+    --color-bg-primary: var(--colordef-dark-bg-primary);
+    --color-bg-primary-hover: var(--colordef-dark-bg-primary-hover);
+    --color-bg-primary-active: var(--colordef-dark-bg-secondary);
 
-    --color-bg-secondary: hsl(280, 6%, 13%);
+    --color-bg-secondary: var(--colordef-dark-bg-secondary);
 
-    --color-text-primary: hsl(280, 8%, 92%);
+    --color-text-primary: var(--colordef-dark-text-primary);
 
-    --color-text-secondary: hsl(247, 5%, 60%);
-    --color-text-secondary-hover: hsl(247, 5%, 60%);
-    --color-text-secondary-active: hsl(247, 5%, 54%);
+    --color-text-contrast: var(--colordef-dark-text-contrast);
 
-    --color-tint: hsl(215, 100%, 61%);
-    --color-tint-hover: hsl(215, 100%, 61%);
-    --color-tint-active: hsl(215, 100%, 55%);
+    --color-text-secondary: var(--colordef-dark-text-secondary);
+    --color-text-secondary-hover: var(--colordef-dark-text-secondary);
+    --color-text-secondary-active: var(--colordef-dark-text-secondary-active);
 }
 
 /* Copies of the above, since we can't combine selectors with media queries */
@@ -46,41 +75,37 @@ html,
     html,
     .darkmode
     {
-        --color-bg-primary: hsl(0, 0%, 0%);
-        --color-bg-primary-hover: hsl(280, 6%, 14%);
-        --color-bg-primary-active: hsl(280, 6%, 13%);
+        --color-bg-primary: var(--colordef-dark-bg-primary);
+        --color-bg-primary-hover: var(--colordef-dark-bg-primary-hover);
+        --color-bg-primary-active: var(--colordef-dark-bg-secondary);
 
-        --color-bg-secondary: hsl(280, 6%, 13%);
+        --color-bg-secondary: var(--colordef-dark-bg-secondary);
 
-        --color-text-primary: hsl(280, 8%, 92%);
+        --color-text-primary: var(--colordef-dark-text-primary);
 
-        --color-text-secondary: hsl(247, 5%, 60%);
-        --color-text-secondary-hover: hsl(247, 5%, 60%);
-        --color-text-secondary-active: hsl(247, 5%, 54%);
+        --color-text-contrast: var(--colordef-dark-text-contrast);
 
-        --color-tint: hsl(215, 100%, 61%);
-        --color-tint-hover: hsl(215, 100%, 61%);
-        --color-tint-active: hsl(215, 100%, 55%);
+        --color-text-secondary: var(--colordef-dark-text-secondary);
+        --color-text-secondary-hover: var(--colordef-dark-text-secondary);
+        --color-text-secondary-active: var(--colordef-dark-text-secondary-active);
     }
 
     .lightmode,
     .inversecolormode
     {
-        --color-bg-primary: white;
-        --color-bg-primary-hover: hsl(280, 6%, 97%);
-        --color-bg-primary-active: hsl(280, 6%, 95%);
+        --color-bg-primary: var(--colordef-light-bg-primary);
+        --color-bg-primary-hover: var(--colordef-light-bg-primary-hover);
+        --color-bg-primary-active: var(--colordef-light-bg-secondary);
 
-        --color-bg-secondary: hsl(280, 6%, 95%);
+        --color-bg-secondary: var(--colordef-light-bg-secondary);
 
-        --color-text-primary: hsl(280, 8%, 23%);
+        --color-text-primary: var(--colordef-light-text-primary);
 
-        --color-text-secondary: hsl(247, 5%, 66%);
-        --color-text-secondary-hover: hsl(247, 5%, 66%);
-        --color-text-secondary-active: hsl(247, 5%, 60%);
+        --color-text-contrast: var(--colordef-light-text-contrast);
 
-        --color-tint: hsl(215, 100%, 61%);
-        --color-tint-hover: hsl(215, 100%, 61%);
-        --color-tint-active: hsl(215, 100%, 55%);
+        --color-text-secondary: var(--colordef-light-text-secondary);
+        --color-text-secondary-hover: var(--colordef-light-text-secondary);
+        --color-text-secondary-active: var(--colordef-light-text-secondary-active);
     }
 }
 
@@ -101,7 +126,7 @@ html,
 
 .bg_media
 {
-    background-color: hsl(280, 8%, 23%);
+    background-color: var(--colordef-bg-media);
 }
 
 
@@ -460,12 +485,12 @@ header h1
 #hero
 {
     position: relative;
-    color: hsl(280, 12%, 90%);
+    color: var(--colordef-dark-text-primary);
     background-color: transparent;
     display: flex;
     flex-direction: column-reverse;
     min-height: 60vh;
-    text-shadow: hsla(0, 0%, 0%, 0.2) 0 0 1rem;
+    text-shadow: var(--colordef-dark-text-contrast) 0 0 1rem;
 }
 
 #hero_image
