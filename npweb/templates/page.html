@@ -8,12 +8,12 @@
 {% block header %}
     {% if page.hero_image %}
         {% with page.hero_image as hero %}
-            <header class="parallax_section" id="hero">
+            <header class="parallax_section {% if hero.text_color == 'light' %}darkmode{% elif hero.text_color == 'dark' %}lightmode{% endif %}" id="hero">
                 <div id="hero_image"
-                    class="layer{{ hero.add_parallax|yesno:'1,0' }} bg_media {{ hero.repeat }} {{ hero.position }}"
+                    class="layer{{ hero.add_parallax|yesno:'1,0' }} {{ hero.repeat }} {{ hero.position }}"
                     style="background-image: url({% if hero.wagtail_image %}{% image hero.wagtail_image original as rendition %}{{ rendition.url }}{% elif hero.svg_image %}{{ hero.svg_image.url }}{% endif %})">
                 </div>
-                <div class="layer0">
+                <div id="hero_gradient" class="layer0">
         {% endwith %}
     {% else %}
         <header class="parallax_section">
@@ -30,7 +30,5 @@
     {% endif %}
     </header>
 {% endblock %}
-
-{% block nav_class %}{{ block.super }}{% if page.hero_image %} darkmode{% endif %}{% endblock %}
 
 {% block extra_js %}{% wagtailuserbar %}{% endblock %}
