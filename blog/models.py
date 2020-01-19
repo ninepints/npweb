@@ -62,12 +62,35 @@ class HeroImage(models.Model):
 
     wagtail_image = models.ForeignKey(
         'wagtailimages.Image',
+        verbose_name='Wagtail image',
         null=True,
         blank=True,
         on_delete=models.CASCADE,
         related_name='+'
     )
-    svg_image = models.FileField(upload_to='hero_images/', blank=True, validators=[FileExtensionValidator(['svg'])])
+    svg_image = models.FileField(
+        'SVG image',
+        upload_to='hero_images/',
+        blank=True,
+        validators=[FileExtensionValidator(['svg'])]
+    )
+
+    wagtail_image_dark = models.ForeignKey(
+        'wagtailimages.Image',
+        verbose_name='dark Wagtail image',
+        null=True,
+        blank=True,
+        on_delete=models.CASCADE,
+        related_name='+',
+        help_text='Alternative Wagtail image to display in dark mode.'
+    )
+    svg_image_dark = models.FileField(
+        'dark SVG image',
+        upload_to='hero_images/',
+        blank=True,
+        validators=[FileExtensionValidator(['svg'])],
+        help_text='Alternative SVG image to display in dark mode.'
+    )
 
     add_parallax = models.BooleanField()
     repeat = models.CharField(
@@ -97,15 +120,29 @@ class HeroImage(models.Model):
         ],
         default='mid center'
     )
+    text_color = models.CharField(
+        help_text='The color to use for overlaid text, to ensure contrast.',
+        max_length=6,
+        choices=[
+            ('light', 'Light text'),
+            ('dark', 'Dark text'),
+            ('either', 'Either color ok'),
+        ]
+    )
 
     panels = [
         FieldPanel('name'),
-        ImageChooserPanel('wagtail_image'),
-        FieldPanel('svg_image'),
+        MultiFieldPanel([
+            ImageChooserPanel('wagtail_image'),
+            ImageChooserPanel('wagtail_image_dark'),
+            FieldPanel('svg_image'),
+            FieldPanel('svg_image_dark'),
+        ], heading='Images'),
         MultiFieldPanel([
             FieldPanel('add_parallax'),
             FieldPanel('repeat'),
             FieldPanel('position'),
+            FieldPanel('text_color'),
         ], heading='Display options'),
     ]
 
@@ -117,6 +154,8 @@ class HeroImage(models.Model):
             raise ValidationError(_('Either a Wagtail image or SVG image is required.'))
         if self.wagtail_image and self.svg_image:
             raise ValidationError(_('Only one Wagtail image or SVG image is allowed.'))
+        if (self.wagtail_image_dark and not self.wagtail_image) or (self.svg_image_dark and not self.svg_image):
+            raise ValidationError(_('Dark Wagtail/SVG images require a corresponding non-dark image'))
 
 
 class BlogPostFeed(BuildableFeed):
