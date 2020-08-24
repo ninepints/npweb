@@ -2,6 +2,8 @@
 {% load wagtailcore_tags %}
 {% load wagtailroutablepage_tags %}
 
+{% wagtail_site as current_site %}
+
 <!DOCTYPE html>
 <html>
     <head>
@@ -22,9 +24,9 @@
             <nav id="main_nav" class="parallax_section"><div class="col_container">
                 <ul class="col12 bulletless">
                     {% block nav_content %}
-                        <li><a href="{% pageurl request.site.root_page %}" class="blocklink sans_serif">Home</a></li>
+                        <li><a href="{% pageurl current_site.root_page %}" class="blocklink sans_serif">Home</a></li>
                         <li><a href="{% slugurl 'about' %}" class="blocklink sans_serif">About</a></li>
-                        <li><a href="{% routablepageurl request.site.root_page.specific 'feed' %}" class="blocklink sans_serif">Feed</a></li>
+                        <li><a href="{% routablepageurl current_site.root_page.specific 'feed' %}" class="blocklink sans_serif">Feed</a></li>
                     {% endblock %}
                 </ul>
             </div></nav>
