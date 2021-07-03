@@ -33,14 +33,17 @@ class BlogIndexView(WagtailBakeryView):
         self.paginate_subpage(obj, year_counter.items(), 'posts_by_date', lambda year: {'year': year})
 
         # Build all posts view
-        self.paginate_subpage(obj, ((None, sum(year_counter.values())),), 'all_posts', lambda _: {})
+        self.paginate_subpage(obj, ((None, sum(year_counter.values())),), 'all_posts', lambda _: {},
+                              always_build_first_page=True)
 
-    def paginate_subpage(self, page, counts, view_name, view_kwargs_func):
+    def paginate_subpage(self, page, counts, view_name, view_kwargs_func, always_build_first_page=False):
         for key, count in counts:
             view_kwargs = view_kwargs_func(key)
             for page_num in range(1, math.ceil(count / page.posts_per_pagination_page) + 1):
                 if page_num > 1:
                     view_kwargs['page_num'] = page_num
+                self.build_subpage(page, view_name, view_kwargs)
+            if count == 0 and always_build_first_page:
                 self.build_subpage(page, view_name, view_kwargs)
 
     def build_subpage(self, page, view_name, view_kwargs):
