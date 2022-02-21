@@ -171,8 +171,15 @@ nav
     margin: 0;
 }
 
+.parallax_section
+{
+    /* Allow children to position relative to sections */
+    position: relative;
+}
+
 .parallax_section:not(.bg_secondary, .bg_transparent, .bg_media)
 {
+    /* Default to a solid background to cover up images on adjacent layers */
     background-color: var(--color-bg-primary);
 }
 
@@ -724,34 +731,6 @@ a.pagination
     object-fit: cover;
 }
 
-/* Some math notes for the parallax effect: let N be the distance between the
-   browser plane and the image plane, relative to the distance between the
-   browser plane and the user (e.g. 0.25 for the current "layer 1" definition).
-   Let X be the height of the "gap" in the browser plane through which the
-   image is viewed. Then we need to extend the image by (N/(N+1))(100vh-X) in
-   the browser plane, or N(100vh-X) in the image plane, to make it long enough
-   to always cover the gap as the user scrolls. */
-
-.full_bleed_section img.layer1
-{
-    height: calc(0.2 * (100vh - 100%) + 100%);
-}
-
-.full_bleed_section img.layer2
-{
-    height: calc(0.334 * (100vh - 100%) + 100%);
-}
-
-.full_bleed_section img.layer3
-{
-    height: calc(0.5 * (100vh - 100%) + 100%);
-}
-
-.full_bleed_section img.layer4
-{
-    height: calc(0.667 * (100vh - 100%) + 100%);
-}
-
 .full_bleed_section a
 {
     position: absolute;
@@ -782,7 +761,6 @@ a.pagination
     .parallax_section,
     article
     {
-        position: relative;
         transform: translateZ(0);
         transform-style: preserve-3d;
     }
@@ -815,5 +793,33 @@ a.pagination
     {
         transform-origin: 100% 0%;
         transform: translateZ(-320px) scale(3.0);
+    }
+
+    /* Some math notes for the parallax effect: let N be the distance between the
+       browser plane and the image plane, relative to the distance between the
+       browser plane and the user (e.g. 0.25 for the current "layer 1" definition).
+       Let X be the height of the "gap" in the browser plane through which the
+       image is viewed. Then we need to extend the image by (N/(N+1))(100vh-X) in
+       the browser plane, or N(100vh-X) in the image plane, to make it long enough
+       to always cover the gap as the user scrolls. */
+
+    .full_bleed_section img.layer1
+    {
+        height: calc(0.2 * (100vh - 100%) + 100%);
+    }
+
+    .full_bleed_section img.layer2
+    {
+        height: calc(0.334 * (100vh - 100%) + 100%);
+    }
+
+    .full_bleed_section img.layer3
+    {
+        height: calc(0.5 * (100vh - 100%) + 100%);
+    }
+
+    .full_bleed_section img.layer4
+    {
+        height: calc(0.667 * (100vh - 100%) + 100%);
     }
 }
