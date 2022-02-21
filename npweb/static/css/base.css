@@ -9,7 +9,8 @@ html {
     --colordef-dark-bg-primary-hover: hsl(280, 6%, 14%);
     --colordef-dark-bg-secondary: hsl(280, 6%, 13%);
 
-    /* We need different fully-transparent colors to avoid weird interpolations, e.g. in gradients */
+    /* We need different fully-transparent colors to avoid weird interpolations,
+       e.g. in gradients */
     --colordef-light-bg-primary-transparent: hsla(0, 0%, 100%, 0.0);
     --colordef-light-bg-primary-semitransparent: hsla(0, 0%, 100%, 0.4);
     --colordef-light-bg-primary-slightlytransparent: hsla(0, 0%, 100%, 0.8);
@@ -36,6 +37,9 @@ html {
     --color-tint: var(--colordef-tint);
     --color-tint-hover: var(--colordef-tint);
     --color-tint-active: var(--colordef-tint-active);
+
+    color: var(--color-text-primary);
+    background-color: var(--color-bg-primary);
 }
 
 html,
@@ -56,6 +60,12 @@ html,
     --color-text-secondary: var(--colordef-light-text-secondary);
     --color-text-secondary-hover: var(--colordef-light-text-secondary);
     --color-text-secondary-active: var(--colordef-light-text-secondary-active);
+
+    /* Reset these when dark mode changes, as custom property values are
+       calculated per-element - that is, a top-level color value inherited by
+       children will not change with the child's custom property value */
+    color: var(--color-text-primary);
+    background-color: var(--color-bg-primary);
 }
 
 .darkmode,
@@ -76,6 +86,9 @@ html,
     --color-text-secondary: var(--colordef-dark-text-secondary);
     --color-text-secondary-hover: var(--colordef-dark-text-secondary);
     --color-text-secondary-active: var(--colordef-dark-text-secondary-active);
+
+    color: var(--color-text-primary);
+    background-color: var(--color-bg-primary);
 }
 
 /* Copies of the above, since we can't combine selectors with media queries */
@@ -99,6 +112,9 @@ html,
         --color-text-secondary: var(--colordef-dark-text-secondary);
         --color-text-secondary-hover: var(--colordef-dark-text-secondary);
         --color-text-secondary-active: var(--colordef-dark-text-secondary-active);
+
+        color: var(--color-text-primary);
+        background-color: var(--color-bg-primary);
     }
 
     .lightmode,
@@ -119,6 +135,9 @@ html,
         --color-text-secondary: var(--colordef-light-text-secondary);
         --color-text-secondary-hover: var(--colordef-light-text-secondary);
         --color-text-secondary-active: var(--colordef-light-text-secondary-active);
+
+        color: var(--color-text-primary);
+        background-color: var(--color-bg-primary);
     }
 }
 
@@ -152,7 +171,7 @@ nav
     margin: 0;
 }
 
-.parallax_section
+.parallax_section:not(.bg_secondary, .bg_transparent, .bg_media)
 {
     background-color: var(--color-bg-primary);
 }
@@ -292,12 +311,9 @@ body
 {
     font-size: 1.25rem;
     line-height: 1.75rem;
-    color: var(--color-text-primary);
     font-family: 'Brando', serif;
     font-weight: normal;
-
     font-variant-numeric: lining-nums;
-    background-color: var(--color-bg-primary);
 }
 
 h1
