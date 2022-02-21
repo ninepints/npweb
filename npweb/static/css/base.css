@@ -779,7 +779,8 @@ a.pagination
         overflow-y: auto;
     }
 
-    .parallax_section
+    .parallax_section,
+    article
     {
         position: relative;
         transform: translateZ(0);
