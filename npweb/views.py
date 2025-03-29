@@ -4,6 +4,8 @@ from django.core.handlers.base import BaseHandler
 
 # Our 404 template depends on middleware, which Buildable404View doesn't consult before rendering
 class Middleware404View(Buildable404View):
+    build_path = 'err-404.html'
+
     def __init__(self, **kwargs):
         self.handler = BaseHandler()
         self.handler.load_middleware()
