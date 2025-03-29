@@ -1,4 +1,0 @@
-Django==3.2.*
-Pygments==2.5.*
-wagtail==2.16.*
-wagtail-bakery==0.4.*

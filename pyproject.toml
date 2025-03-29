@@ -1,0 +1,10 @@
+[project]
+name = "npweb"
+version = "0.1.0"
+requires-python = "~=3.9.21"
+dependencies = [
+    "django==3.2.*",
+    "pygments==2.5.*",
+    "wagtail==2.16.*",
+    "wagtail-bakery==0.4.*",
+]
